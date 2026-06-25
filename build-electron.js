@@ -33,4 +33,9 @@ if (fs.existsSync('public')) {
   copyDir('public', '.next/standalone/public');
 }
 
+// Copy .env to standalone if it exists
+if (fs.existsSync('.env')) {
+  fs.copyFileSync('.env', '.next/standalone/.env');
+}
+
 console.log('Electron preparation complete!');

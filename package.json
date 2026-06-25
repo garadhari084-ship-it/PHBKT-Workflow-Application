@@ -9,6 +9,7 @@
     "directories": {
       "output": "dist-electron"
     },
+    "asar": false,
     "files": [
       "main.js",
       ".next/standalone/**/*",
