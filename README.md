@@ -1,11 +1,21 @@
-<div align="center">
+# Firebase Studio
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+This is a NextJS starter in Firebase Studio.
 
-  <h1>Built with AI Studio</h2>
+To get started, take a look at src/app/page.tsx.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Environment Variables
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+This project uses environment variables for configuration, particularly for connecting to third-party services like Google AI.
 
-</div>
+1.  Create a file named `.env.local` in the root of the project by copying the template:
+    ```bash
+    cp .env.template .env.local
+    ```
+2.  Add your secret keys to `.env.local`. This file is ignored by Git and should not be committed.
+
+### Production Environment
+
+When you deploy your application to Firebase App Hosting, you must configure these same environment variables in the Firebase console for your backend.
+
+Go to your Firebase project -> App Hosting -> Your Backend -> Settings, and add your `GEMINI_API_KEY` there.

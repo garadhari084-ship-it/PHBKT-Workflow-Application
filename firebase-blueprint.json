@@ -1,0 +1,859 @@
+{
+  "entities": {
+    "WorkItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "WorkItem",
+      "type": "object",
+      "description": "Represents a work item in the workflow management system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the WorkItem entity."
+        },
+        "workType": {
+          "type": "string",
+          "description": "Type of work item."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the work item."
+        },
+        "priority": {
+          "type": "string",
+          "description": "Priority of the work item."
+        },
+        "createdDate": {
+          "type": "string",
+          "description": "Date when the work item was created.",
+          "format": "date-time"
+        },
+        "inboundMethod": {
+          "type": "string",
+          "description": "Method by which the work item was received."
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject or title of the work item."
+        },
+        "assignedUserId": {
+          "type": "string",
+          "description": "Reference to User assigned to the work item. (Relationship: User 1:N WorkItem)"
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Reference to the unique Customer ID."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the work item from the form's overview."
+        },
+        "leadType": {
+          "type": "string",
+          "description": "The source of the lead (e.g. Self Sources, Referral)."
+        },
+        "customerName": {
+          "type": "string",
+          "description": "Name of the customer."
+        },
+        "customerEmail": {
+          "type": "string",
+          "format": "email",
+          "description": "Email of the customer."
+        },
+        "customerPhone": {
+          "type": "string",
+          "description": "Primary phone number of the customer."
+        },
+        "secondaryPhone": {
+          "type": "string",
+          "description": "Secondary phone number of the customer."
+        },
+        "address": {
+          "type": "string",
+          "description": "Address of the customer."
+        },
+        "city": {
+          "type": "string",
+          "description": "City of the customer."
+        },
+        "state": {
+          "type": "string",
+          "description": "State of the customer."
+        },
+        "pinCode": {
+          "type": "string",
+          "description": "Pin code of the customer's address."
+        },
+        "hasBusiness": {
+          "type": "boolean",
+          "description": "Whether the customer has a business."
+        },
+        "businessName": {
+          "type": "string",
+          "description": "Name of the customer's business."
+        },
+        "lockedBy": {
+          "type": "string",
+          "description": "The ID of the user who has locked the work item for editing."
+        },
+        "customerDateOfBirth": {
+          "type": "string",
+          "format": "date",
+          "description": "Date of birth of the customer."
+        },
+        "customerAadhar": {
+          "type": "string",
+          "description": "The customer's 12-digit unique identification number (Aadhar)."
+        },
+        "customerPan": {
+          "type": "string",
+          "description": "The customer's 10-character alphanumeric identifier (PAN)."
+        },
+        "customerBankName": {
+          "type": "string",
+          "description": "Name of the customer's bank."
+        },
+        "customerAccountNumber": {
+          "type": "string",
+          "description": "Customer's bank account number."
+        },
+        "customerIfscCode": {
+          "type": "string",
+          "description": "IFSC code of the customer's bank branch."
+        },
+        "customerOtherInfo": {
+          "type": "string",
+          "description": "Any other miscellaneous information about the customer."
+        }
+      },
+      "required": [
+        "id",
+        "workType",
+        "status",
+        "priority",
+        "createdDate",
+        "inboundMethod",
+        "customerName",
+        "customerPhone"
+      ]
+    },
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user in the system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the User entity, matches Firebase Auth UID."
+        },
+        "employeeId": {
+          "type": "string",
+          "description": "Auto-generated unique sequential identifier for the employee (e.g., 1568400)."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the user.",
+          "format": "email"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "First name of the user."
+        },
+        "middleName": {
+          "type": "string",
+          "description": "Middle name of the user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the user."
+        },
+        "dateOfBirth": {
+          "type": "string",
+          "format": "date",
+          "description": "The user's date of birth."
+        },
+        "role": {
+          "type": "string",
+          "description": "Role of the user (e.g., admin, user).",
+          "enum": [
+            "User",
+            "admin"
+          ]
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number for the user."
+        },
+        "aadharNumber": {
+            "type": "string",
+            "description": "The user's 12-digit unique identification number (Aadhar)."
+        },
+        "panNumber": {
+            "type": "string",
+            "description": "The user's 10-character alphanumeric identifier (PAN)."
+        },
+        "company": {
+          "type": "string",
+          "description": "The company the user works for."
+        },
+        "department": {
+          "type": "string",
+          "description": "The department the user belongs to."
+        },
+        "jobTitle": {
+          "type": "string",
+          "description": "The user's job title."
+        },
+        "level": {
+          "type": "string",
+          "description": "The user's level or grade in the organization."
+        },
+        "workLocation": {
+          "type": "string",
+          "description": "The user's primary work location."
+        }
+      },
+      "required": [
+        "id",
+        "employeeId",
+        "email",
+        "firstName",
+        "lastName",
+        "department",
+        "jobTitle",
+        "level",
+        "workLocation",
+        "role",
+        "phoneNumber",
+        "dateOfBirth"
+      ]
+    },
+    "Customer": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Customer",
+      "type": "object",
+      "description": "Represents a customer in the system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique 10-digit alphanumeric identifier for the Customer entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the customer."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email of the customer."
+        },
+        "phone": {
+          "type": "string",
+          "description": "Primary phone number of the customer."
+        },
+        "secondaryPhone": {
+          "type": "string",
+          "description": "Secondary phone number of the customer."
+        },
+        "address": {
+          "type": "string",
+          "description": "Address of the customer."
+        },
+        "city": {
+          "type": "string",
+          "description": "City of the customer."
+        },
+        "state": {
+          "type": "string",
+          "description": "State of the customer."
+        },
+        "pinCode": {
+          "type": "string",
+          "description": "Pin code of the customer's address."
+        },
+        "createdDate": {
+          "type": "string",
+          "description": "Date when the customer was created.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "phone",
+        "createdDate"
+      ]
+    },
+    "SLA": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SLA",
+      "type": "object",
+      "description": "Represents a Service Level Agreement for work items.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the SLA entity."
+        },
+        "workItemId": {
+          "type": "string",
+          "description": "Reference to WorkItem. (Relationship: WorkItem 1:1 SLA)"
+        },
+        "targetResolutionTime": {
+          "type": "string",
+          "description": "Target date and time for work item resolution.",
+          "format": "date-time"
+        },
+        "breached": {
+          "type": "boolean",
+          "description": "Indicates whether the SLA has been breached."
+        }
+      },
+      "required": [
+        "id",
+        "workItemId",
+        "targetResolutionTime"
+      ]
+    },
+    "Note": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Note",
+      "type": "object",
+      "description": "Represents a note associated with a work item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Note entity."
+        },
+        "workItemId": {
+          "type": "string",
+          "description": "Reference to WorkItem."
+        },
+        "authorId": {
+          "type": "string",
+          "description": "Reference to User who created the note."
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "text": {
+          "type": "string"
+        },
+        "category": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "workItemId",
+        "authorId",
+        "date",
+        "text"
+      ]
+    },
+    "GlobalNote": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "GlobalNote",
+      "type": "object",
+      "description": "Represents a global note associated with a customer, not necessarily a specific work item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the GlobalNote."
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Reference to the Customer this note is about."
+        },
+        "workItemId": {
+          "type": "string",
+          "description": "Optional reference to a related WorkItem."
+        },
+        "text": {
+          "type": "string",
+          "description": "The content of the note."
+        },
+        "authorId": {
+          "type": "string",
+          "description": "Reference to the User who created the note."
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date the note was created."
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject of the global note."
+        }
+      },
+      "required": [
+        "id",
+        "customerId",
+        "text",
+        "authorId",
+        "date"
+      ]
+    },
+    "Transaction": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Transaction",
+      "type": "object",
+      "description": "Represents a financial transaction associated with a work item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Transaction."
+        },
+        "customerId": {
+          "type": "string",
+          "description": "Reference to the Customer this transaction is for."
+        },
+        "workItemId": {
+          "type": "string",
+          "description": "Reference to the WorkItem this transaction is about."
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date the transaction occurred."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the transaction."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of transaction.",
+          "enum": [
+            "Invoice",
+            "Payment"
+          ]
+        },
+        "amount": {
+          "type": "number",
+          "description": "The transaction amount. Always positive."
+        },
+        "createdById": {
+          "type": "string",
+          "description": "Reference to the User who created the transaction."
+        }
+      },
+      "required": [
+        "id",
+        "customerId",
+        "workItemId",
+        "date",
+        "description",
+        "type",
+        "amount",
+        "createdById"
+      ]
+    },
+    "AuditLog": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AuditLog",
+      "type": "object",
+      "description": "Represents an audit log entry for actions performed in the system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the AuditLog entity."
+        },
+        "userId": {
+          "type": "string",
+          "description": "Reference to User who performed the action. (Relationship: User 1:N AuditLog)"
+        },
+        "workItemId": {
+          "type": "string",
+          "description": "Reference to WorkItem associated with the action. (Relationship: WorkItem 1:N AuditLog)"
+        },
+        "actionType": {
+          "type": "string",
+          "description": "Type of action performed (e.g., status change, assignment)."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Date and time when the action was performed.",
+          "format": "date-time"
+        },
+        "details": {
+          "type": "string",
+          "description": "Details about the action performed."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "actionType",
+        "timestamp"
+      ]
+    },
+    "Document": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Document",
+      "type": "object",
+      "description": "Represents a document (like an image) uploaded to the system.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Document entity."
+        },
+        "workItemId": {
+          "type": "string",
+          "description": "Reference to WorkItem the document is associated with."
+        },
+        "name": {
+          "type": "string",
+          "description": "Original filename of the document."
+        },
+        "url": {
+          "type": "string",
+          "description": "Data URL of the uploaded document/image."
+        },
+        "uploadedAt": {
+          "type": "string",
+          "description": "Date and time when the document was uploaded.",
+          "format": "date-time"
+        },
+        "uploadedById": {
+          "type": "string",
+          "description": "Reference to User who uploaded the document."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of the document (e.g., EMAIL, CORR, QUOTE)."
+        },
+        "direction": {
+          "type": "string",
+          "description": "The direction of the communication (e.g., INBOUND, OUTBOUND).",
+          "enum": [
+            "INBOUND",
+            "OUTBOUND"
+          ]
+        },
+        "documentSource": {
+          "type": "string",
+          "description": "The source of the document (e.g., PRPC, XEROX)."
+        },
+        "businessEvent": {
+          "type": "string",
+          "description": "The business event related to the document (e.g., DOCGEN, QUOTE)."
+        }
+      },
+      "required": [
+        "id",
+        "workItemId",
+        "name",
+        "url",
+        "uploadedAt",
+        "uploadedById"
+      ]
+    },
+    "Task": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Task",
+      "type": "object",
+      "description": "Represents a task associated with a work item.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Task entity."
+        },
+        "workItemId": {
+          "type": "string",
+          "description": "Reference to WorkItem."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the task."
+        },
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the task."
+        },
+        "status": {
+          "type": "string",
+          "description": "Status of the task.",
+          "enum": [
+            "Pending",
+            "In Progress",
+            "Completed"
+          ]
+        },
+        "createdDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "createdBy": {
+          "type": "string",
+          "description": "Reference to User who created the task."
+        }
+      },
+      "required": [
+        "id",
+        "workItemId",
+        "title",
+        "status",
+        "createdDate",
+        "createdBy"
+      ]
+    },
+    "Counter": {
+      "title": "Counter",
+      "type": "object",
+      "description": "A distributed counter for generating sequential IDs.",
+      "properties": {
+        "value": {
+          "type": "number",
+          "description": "The current value of the counter."
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "AppConfig": {
+      "title": "AppConfig",
+      "type": "object",
+      "description": "Stores global application configuration settings.",
+      "properties": {
+        "logoUrl": {
+          "type": "string",
+          "description": "The data URL of the application logo."
+        },
+        "externalApiKey": {
+          "type": "string",
+          "description": "The secret API key for external integrations."
+        }
+      }
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "users/{userId}",
+        "definition": {
+          "entityName": "User",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Stores user profiles. Includes a 'role' field for authorization.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier for the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "customers/{customerId}",
+        "definition": {
+          "entityName": "Customer",
+          "schema": {
+            "$ref": "#/backend/entities/Customer"
+          },
+          "description": "Stores unique customer profiles.",
+          "params": [
+            {
+              "name": "customerId",
+              "description": "The unique 10-digit alphanumeric identifier for the customer."
+            }
+          ]
+        }
+      },
+      {
+        "path": "work_items/{workItemId}",
+        "definition": {
+          "entityName": "WorkItem",
+          "schema": {
+            "$ref": "#/backend/entities/WorkItem"
+          },
+          "description": "Stores work items.",
+          "params": [
+            {
+              "name": "workItemId",
+              "description": "The unique identifier for the work item."
+            }
+          ]
+        }
+      },
+      {
+        "path": "work_items/{workItemId}/slas/{slaId}",
+        "definition": {
+          "entityName": "SLA",
+          "schema": {
+            "$ref": "#/backend/entities/SLA"
+          },
+          "description": "Stores SLAs for work items.",
+          "params": [
+            {
+              "name": "workItemId",
+              "description": "The unique identifier for the work item."
+            },
+            {
+              "name": "slaId",
+              "description": "The unique identifier for the SLA."
+            }
+          ]
+        }
+      },
+      {
+        "path": "work_items/{workItemId}/notes/{noteId}",
+        "definition": {
+          "entityName": "Note",
+          "schema": {
+            "$ref": "#/backend/entities/Note"
+          },
+          "description": "Stores notes for a specific work item.",
+          "params": [
+            {
+              "name": "workItemId",
+              "description": "The unique identifier for the work item."
+            },
+            {
+              "name": "noteId",
+              "description": "The unique identifier for the note."
+            }
+          ]
+        }
+      },
+      {
+        "path": "work_items/{workItemId}/documents/{documentId}",
+        "definition": {
+          "entityName": "Document",
+          "schema": {
+            "$ref": "#/backend/entities/Document"
+          },
+          "description": "Stores documents associated with work items.",
+          "params": [
+            {
+              "name": "workItemId",
+              "description": "The unique identifier for the work item."
+            },
+            {
+              "name": "documentId",
+              "description": "The unique identifier for the document."
+            }
+          ]
+        }
+      },
+      {
+        "path": "work_items/{workItemId}/tasks/{taskId}",
+        "definition": {
+          "entityName": "Task",
+          "schema": {
+            "$ref": "#/backend/entities/Task"
+          },
+          "description": "Stores tasks for a specific work item.",
+          "params": [
+            {
+              "name": "workItemId",
+              "description": "The unique identifier for the work item."
+            },
+            {
+              "name": "taskId",
+              "description": "The unique identifier for the task."
+            }
+          ]
+        }
+      },
+      {
+        "path": "work_items/{workItemId}/audit_logs/{auditLogId}",
+        "definition": {
+          "entityName": "AuditLog",
+          "schema": {
+            "$ref": "#/backend/entities/AuditLog"
+          },
+          "description": "Stores audit logs for a specific work item.",
+          "params": [
+            {
+              "name": "workItemId",
+              "description": "The unique identifier for the work item."
+            },
+            {
+              "name": "auditLogId",
+              "description": "The unique identifier for the audit log entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "transactions/{transactionId}",
+        "definition": {
+          "entityName": "Transaction",
+          "schema": {
+            "$ref": "#/backend/entities/Transaction"
+          },
+          "description": "Stores all financial transactions for all customers. Indexed by customerId.",
+          "params": [
+            {
+              "name": "transactionId",
+              "description": "The unique identifier for the transaction."
+            }
+          ]
+        }
+      },
+      {
+        "path": "counters/{counterId}",
+        "definition": {
+          "entityName": "Counter",
+          "schema": {
+            "$ref": "#/backend/entities/Counter"
+          },
+          "description": "Stores distributed counters for generating sequential IDs. For example, a document at /counters/work_items would store the counter for work items.",
+          "params": [
+            {
+              "name": "counterId",
+              "description": "The name of the counter (e.g., 'work_items', 'users')."
+            }
+          ]
+        }
+      },
+      {
+        "path": "app_config/{configId}",
+        "definition": {
+          "entityName": "AppConfig",
+          "schema": {
+            "$ref": "#/backend/entities/AppConfig"
+          },
+          "description": "Stores global application settings. Expects a single document with a known ID like 'main'.",
+          "params": [
+            {
+              "name": "configId",
+              "description": "The ID of the configuration document (e.g., 'main')."
+            }
+          ]
+        }
+      },
+      {
+        "path": "global_notes/{noteId}",
+        "definition": {
+          "entityName": "GlobalNote",
+          "schema": {
+            "$ref": "#/backend/entities/GlobalNote"
+          },
+          "description": "Stores global notes that are associated with a customer but not necessarily a specific work item.",
+          "params": [
+            {
+              "name": "noteId",
+              "description": "The unique identifier for the global note."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure has been simplified to a non-multi-tenant model. Collections like `users` and `work_items` are at the root level for straightforward access. Subcollections for `notes`, `documents`, and `audit_logs` are nested under their parent `work_items` to create clear data ownership and simplify queries and security rules. A new `app_config` collection is added to store global settings like the application logo. This flat hierarchy for primary records combined with nesting for child records is easier to query and maintain."
+  }
+}

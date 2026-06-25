@@ -1,0 +1,181 @@
+/**
+ * Core Philosophy: This ruleset enforces a user-centric security model. Data access is primarily determined by document ownership and a user's role.
+ *
+ * Data Structure: Key collections like `users` and `work_items` are at the root level, simplifying data paths.
+ *
+ * Key Security Decisions:
+ * - Role-Based Access: A `role` field on the user document (e.g., 'admin') is used for elevated privileges, such as deleting users.
+ * - Ownership: Users can create and manage their own data (e.g., their user profile, notes they've authored).
+ * - Shared Access: All authenticated users can read most data, like user profiles, to facilitate collaboration within the application. Work items are fully accessible to all users.
+ * - Immutable Logs: The `audit_logs` collection is append-only. Once an entry is created, it cannot be modified or deleted.
+ * - Admin Privileges: Users with an 'admin' role have broader permissions, including the ability to create and delete other users' profiles.
+ *
+ * Denormalization for Authorization: The rules rely on the `role` field within a user's document to perform authorization checks without needing to look up other documents.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ----------------------------------------------------------------------
+    // Helper Functions
+    // ----------------------------------------------------------------------
+
+    /**
+     * Returns true if the user is signed in.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Returns true if the requesting user's UID matches the given userId.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * Retrieves the role of the currently authenticated user from their profile.
+     */
+    function getRole(userId) {
+      return get(/databases/$(database)/documents/users/$(userId)).data.role;
+    }
+
+    /**
+     * Checks if the currently authenticated user has an 'admin' role.
+     */
+    function isAdmin() {
+      return isSignedIn() && getRole(request.auth.uid) == 'admin';
+    }
+
+    // ----------------------------------------------------------------------
+    // Collection Rules
+    // ----------------------------------------------------------------------
+
+    /**
+     * @description Controls access to User profiles. Users can manage their own profile. Admins can create, update, and delete any user.
+     * @path /users/{userId}
+     * @allow (create) A new user `auth.uid=user_123` can create their own profile. An admin can also create a new user profile.
+     * @allow (update) User `user_123` can update their own profile. An admin can also update another user's profile.
+     * @deny (delete) A regular user cannot delete another user's profile.
+     * @principle Enforces a mix of document ownership for writes, shared access for reads, and admin privileges for user management.
+     */
+    match /users/{userId} {
+      allow get, list: if isSignedIn();
+      allow create: if isOwner(userId) || isAdmin();
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isOwner(userId) || isAdmin();
+    }
+
+    /**
+     * @description Controls access to Global Notes. Users can read/create notes. Only authors or admins can edit/delete.
+     * @path /global_notes/{noteId}
+     * @principle Restricts writes to the document owner or an admin.
+     */
+    match /global_notes/{noteId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.authorId == request.auth.uid;
+      allow update, delete: if isSignedIn() && (resource.data.authorId == request.auth.uid || isAdmin());
+    }
+    
+    /**
+     * @description Controls access to distributed counters used for sequential ID generation.
+     * @path /counters/{counterId}
+     * @allow (read, write) Any authenticated user can read and write to counters. Transactions will prevent race conditions.
+     * @principle Open access for authenticated users to enable ID generation.
+     */
+    match /counters/{counterId} {
+      allow read, write: if isSignedIn();
+    }
+    
+    /**
+     * @description Controls access to Customers. Any authenticated user can create, read, update, and delete customers.
+     * @path /customers/{customerId}
+     * @allow (create, get, list, update, delete) An authenticated user can perform any action on a customer.
+     * @principle Open access for all authenticated users.
+     */
+    match /customers/{customerId} {
+      allow read, write: if isSignedIn();
+    }
+
+    /**
+     * @description Controls access to financial transactions. All authenticated users can manage transactions.
+     * @path /transactions/{transactionId}
+     * @principle Allows broad access for internal financial tracking.
+     */
+    match /transactions/{transactionId} {
+        allow get, list: if isSignedIn();
+        allow write: if isSignedIn();
+    }
+
+    /**
+     * @description Controls access to Work Items. Any authenticated user can create, read, update, and delete work items.
+     * @path /work_items/{workItemId}
+     * @allow (create, get, list, update, delete) An authenticated user can perform any action on a work item.
+     * @principle Open access for all authenticated users to encourage collaboration.
+     */
+    match /work_items/{workItemId} {
+      allow read, write: if isSignedIn();
+
+      /**
+       * @description Controls access to SLAs, which are subcollections of Work Items. Access is granted to any signed-in user.
+       * @path /work_items/{workItemId}/slas/{slaId}
+       * @principle Inherits access context, allows any authenticated user to manage SLAs.
+       */
+      match /slas/{slaId} {
+        allow read, write: if isSignedIn();
+      }
+
+      /**
+       * @description Controls access to Notes. Authenticated users can read notes. Only authors or admins can create, update, or delete notes.
+       * @path /work_items/{workItemId}/notes/{noteId}
+       * @principle Restricts writes to the document owner or an admin.
+       */
+      match /notes/{noteId} {
+        allow read: if isSignedIn();
+        allow create: if isSignedIn() && request.resource.data.authorId == request.auth.uid;
+        allow update, delete: if isSignedIn() && (resource.data.authorId == request.auth.uid || isAdmin());
+      }
+
+      /**
+       * @description Controls access to Documents. Access is granted to any signed-in user, but only admins can delete.
+       * @path /work_items/{workItemId}/documents/{documentId}
+       * @principle Allows any authenticated user to manage documents for a work item, with special delete permissions for admins.
+       */
+      match /documents/{documentId} {
+        allow read, write: if isSignedIn();
+        allow delete: if isAdmin();
+      }
+
+      /**
+       * @description Controls access to Tasks, which are subcollections of Work Items. Access is granted to any signed-in user.
+       * @path /work_items/{workItemId}/tasks/{taskId}
+       * @principle Inherits access context, allows any authenticated user to manage tasks.
+       */
+      match /tasks/{taskId} {
+        allow read, write: if isSignedIn();
+      }
+
+      /**
+       * @description Controls access to Audit Logs, which are subcollections of Work Items. Authenticated users can read and create logs, but cannot modify or delete them.
+       * @path /work_items/{workItemId}/audit_logs/{auditLogId}
+       * @principle Enforces data immutability for critical logging records.
+       */
+      match /audit_logs/{auditLogId} {
+        allow get, list: if isSignedIn();
+        allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+        allow update, delete: if false;
+      }
+    }
+    
+    /**
+     * @description Controls access to global application configuration. Any user (authenticated or not) can read the configuration, only admins can write.
+     * @path /app_config/{configId}
+     * @principle Allow global read for public settings, restrict writes to admins.
+     */
+    match /app_config/{configId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}

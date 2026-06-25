@@ -1,0 +1,6 @@
+{
+  "name": "PHBKT Workflow Application",
+  "description": "App imported from Firebase Studio",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
