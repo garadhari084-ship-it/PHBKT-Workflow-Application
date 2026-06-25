@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
 import { doc, collection, query, where } from 'firebase/firestore';
 import type { Customer, WorkItem, Transaction, User } from '@/lib/types';
@@ -9,16 +9,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, ArrowLeft, User as UserIcon, Briefcase, IndianRupee } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useMemo } from 'react';
+import { useMemo, Suspense } from 'react';
 import WorkItemTable from '@/components/app/work-item-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import ClientFormattedDate from '@/components/app/client-formatted-date';
 import Link from 'next/link';
 
-export default function ViewCustomerPage() {
-  const params = useParams();
+function ViewCustomerContent() {
+  const searchParams = useSearchParams();
   const router = useRouter();
-  const id = params.id as string;
+  const id = searchParams.get('id') as string;
   const firestore = useFirestore();
 
   // Fetch Customer
@@ -124,7 +124,7 @@ export default function ViewCustomerPage() {
             </Button>
             <h1 className="text-2xl font-bold">Customer Details: {customer.name}</h1>
             </div>
-            <Button onClick={() => router.push(`/dashboard/admin/manage-customer/edit/${customer.id}`)}>
+            <Button onClick={() => router.push(`/dashboard/admin/manage-customer/edit?id=${customer.id}`)}>
                 Edit Customer
             </Button>
         </div>
@@ -200,7 +200,7 @@ export default function ViewCustomerPage() {
                                     <ClientFormattedDate date={transaction.date} formatString="dd-MMM-yyyy" />
                                 </TableCell>
                                 <TableCell>
-                                    <Link href={`/dashboard/work-item/${transaction.workItemId}`} className="hover:underline text-blue-600">
+                                    <Link href={`/dashboard/work-item?id=${transaction.workItemId}`} className="hover:underline text-blue-600">
                                         {transaction.workItemId}
                                     </Link>
                                 </TableCell>
@@ -227,5 +227,13 @@ export default function ViewCustomerPage() {
             </CardContent>
         </Card>
     </div>
+  );
+}
+
+export default function ViewCustomerPage() {
+  return (
+    <Suspense fallback={<div className="p-8"><Skeleton className="h-8 w-64 mb-4" /></div>}>
+      <ViewCustomerContent />
+    </Suspense>
   );
 }

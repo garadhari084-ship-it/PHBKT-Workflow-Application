@@ -84,7 +84,7 @@ export default function CustomerTable({ customers }: CustomerTableProps) {
 
   const handleModifyClick = (e: React.MouseEvent, customer: Customer) => {
     e.stopPropagation();
-    router.push(`/dashboard/admin/manage-customer/edit/${customer.id}`);
+    router.push(`/dashboard/admin/manage-customer/edit?id=${customer.id}`);
   };
 
   return (
@@ -106,7 +106,7 @@ export default function CustomerTable({ customers }: CustomerTableProps) {
               {customers.map(customer => (
                 <TableRow key={customer.id}>
                   <TableCell className="font-medium py-0">
-                    <Link href={`/dashboard/admin/manage-customer/view/${customer.id}`} className="hover:underline text-blue-600">
+                    <Link href={`/dashboard/admin/manage-customer/view?id=${customer.id}`} className="hover:underline text-blue-600">
                       {customer.id}
                     </Link>
                   </TableCell>

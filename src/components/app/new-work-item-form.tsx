@@ -566,7 +566,7 @@ const NewWorkItemForm = () => {
           let openTabs: WorkItemTab[] = openTabsString ? JSON.parse(openTabsString) : [];
     
           const filteredTabs = openTabs.filter(tab => tab.href !== '/dashboard/new-work');
-          const newTab: WorkItemTab = { href: `/dashboard/work-item/${newWorkItemId}`, label: newWorkItemId };
+          const newTab: WorkItemTab = { href: `/dashboard/work-item?id=${newWorkItemId}`, label: newWorkItemId };
           if (!filteredTabs.find(tab => tab.href === newTab.href)) {
               filteredTabs.push(newTab);
           }

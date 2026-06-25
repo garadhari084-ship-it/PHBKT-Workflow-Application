@@ -298,7 +298,7 @@ export default function PaymentTransactionsPage() {
                         return (
                         <TableRow key={workItem.id}>
                             <TableCell className="font-medium">
-                            <Link href={`/dashboard/work-item/${workItem.id}`} className="hover:underline text-blue-600">
+                            <Link href={`/dashboard/work-item?id=${workItem.id}`} className="hover:underline text-blue-600">
                                 {workItem.id}
                             </Link>
                             </TableCell>
@@ -352,7 +352,7 @@ export default function PaymentTransactionsPage() {
                                         <ClientFormattedDate date={t.date} formatString="dd-MMM-yyyy" />
                                     </TableCell>
                                     <TableCell className="font-medium">
-                                        <Link href={`/dashboard/work-item/${t.workItemId}`} className="hover:underline text-blue-600">
+                                        <Link href={`/dashboard/work-item?id=${t.workItemId}`} className="hover:underline text-blue-600">
                                             {t.workItemId}
                                         </Link>
                                     </TableCell>

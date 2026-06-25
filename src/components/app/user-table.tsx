@@ -88,7 +88,7 @@ export default function UserTable({ users }: UserTableProps) {
 
   const handleModifyClick = (e: React.MouseEvent, user: User) => {
     e.stopPropagation();
-    router.push(`/dashboard/admin/users/edit/${user.id}`);
+    router.push(`/dashboard/admin/users/edit?id=${user.id}`);
   };
 
   return (

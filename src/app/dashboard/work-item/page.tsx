@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
 import { doc, collection, query, orderBy, where } from 'firebase/firestore';
 import WorkItemDetails from '@/components/app/work-item-details';
@@ -8,11 +8,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import type { WorkItem, Note, Document, User, Task, Transaction } from '@/lib/types';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
-import { useMemo } from 'react';
+import { useMemo, Suspense } from 'react';
 
-export default function WorkItemPage() {
-  const params = useParams();
-  const id = params.id as string;
+function WorkItemContent() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id') as string;
   const firestore = useFirestore();
 
   const workItemRef = useMemoFirebase(() => {
@@ -114,5 +114,13 @@ export default function WorkItemPage() {
         transactions={transactions}
       />
     </div>
+  );
+}
+
+export default function WorkItemPage() {
+  return (
+    <Suspense fallback={<div className="p-4 space-y-4"><Skeleton className="h-24 w-full" /></div>}>
+      <WorkItemContent />
+    </Suspense>
   );
 }

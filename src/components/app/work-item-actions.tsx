@@ -1101,7 +1101,7 @@ function CloneWorkItemForm({ workItem, notes, onClose }: { workItem: WorkItem; n
                 const openTabsString = localStorage.getItem('openWorkItemTabs');
                 let openTabs: WorkItemTab[] = openTabsString ? JSON.parse(openTabsString) : [];
                 
-                const newTab: WorkItemTab = { href: `/dashboard/work-item/${newWorkItemId}`, label: newWorkItemId };
+                const newTab: WorkItemTab = { href: `/dashboard/work-item?id=${newWorkItemId}`, label: newWorkItemId };
                 if (!openTabs.find(tab => tab.href === newTab.href)) {
                     openTabs.push(newTab);
                 }

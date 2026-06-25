@@ -68,13 +68,13 @@ export default function WorkItemTable({ workItems, users, showActions = false, c
     const openTabsString = localStorage.getItem('openWorkItemTabs');
     let openTabs: WorkItemTab[] = openTabsString ? JSON.parse(openTabsString) : [];
 
-    if (!openTabs.find(tab => tab.href === `/dashboard/work-item/${item.id}`)) {
-      openTabs.push({ href: `/dashboard/work-item/${item.id}`, label: item.id });
+    if (!openTabs.find(tab => tab.href === `/dashboard/work-item?id=${item.id}`)) {
+      openTabs.push({ href: `/dashboard/work-item?id=${item.id}`, label: item.id });
       localStorage.setItem('openWorkItemTabs', JSON.stringify(openTabs));
       window.dispatchEvent(new CustomEvent('tabs-update'));
     }
 
-    router.push(`/dashboard/work-item/${item.id}`);
+    router.push(`/dashboard/work-item?id=${item.id}`);
   };
 
   const getDisplayStatus = (status: WorkItem['status']): WorkItem['status'] => {

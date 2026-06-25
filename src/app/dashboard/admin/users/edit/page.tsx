@@ -1,26 +1,27 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
-import type { Customer } from '@/lib/types';
-import EditCustomerForm from '@/components/app/edit-customer-form';
+import type { User } from '@/lib/types';
+import EditUserForm from '@/components/app/edit-user-form';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { Suspense } from 'react';
 
-export default function EditCustomerPage() {
-  const params = useParams();
-  const id = params.id as string;
+function EditUserContent() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id') as string;
   const firestore = useFirestore();
 
-  const customerRef = useMemoFirebase(() => {
+  const userRef = useMemoFirebase(() => {
     if (!firestore || !id) return null;
-    return doc(firestore, `customers/${id}`);
+    return doc(firestore, `users/${id}`);
   }, [firestore, id]);
 
-  const { data: customer, isLoading: isLoadingCustomer, error } = useDoc<Customer>(customerRef);
+  const { data: user, isLoading: isLoadingUser, error } = useDoc<User>(userRef);
 
   if (error) {
     return (
@@ -30,7 +31,7 @@ export default function EditCustomerPage() {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>
-              Failed to load customer data. Please check your network connection and try again.
+              Failed to load user data. Please check your network connection and try again.
             </AlertDescription>
           </Alert>
         </div>
@@ -38,7 +39,7 @@ export default function EditCustomerPage() {
     );
   }
 
-  if (isLoadingCustomer) {
+  if (isLoadingUser) {
     return (
       <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
         <div className="max-w-5xl mx-auto">
@@ -65,11 +66,12 @@ export default function EditCustomerPage() {
     );
   }
 
-  if (!customer) {
+  if (!user) {
+    // Can't use notFound() directly in client component after hooks.
     return (
        <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-8 text-center">
-            <h1 className="text-2xl font-bold">Customer Not Found</h1>
-            <p className="text-muted-foreground">The customer with ID "{id}" could not be found.</p>
+            <h1 className="text-2xl font-bold">User Not Found</h1>
+            <p className="text-muted-foreground">The user with ID "{id}" could not be found.</p>
         </div>
     );
   }
@@ -77,9 +79,17 @@ export default function EditCustomerPage() {
   return (
     <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Edit Customer: {customer.name}</h1>
-        <EditCustomerForm customer={customer} />
+        <h1 className="text-2xl font-bold mb-6">Edit User: {user.firstName} {user.lastName}</h1>
+        <EditUserForm user={user} />
       </div>
     </div>
+  );
+}
+
+export default function EditUserPage() {
+  return (
+    <Suspense fallback={<div className="p-8"><Skeleton className="h-10 w-48 mb-6" /></div>}>
+      <EditUserContent />
+    </Suspense>
   );
 }
