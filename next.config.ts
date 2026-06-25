@@ -3,7 +3,7 @@ import type {NextConfig} from 'next';
 const isExportMode = process.env.BUILD_MODE === 'export';
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  output: isExportMode ? "export" : "standalone",
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,
@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  productionBrowserSourceMaps: false,
   images: {
     unoptimized: isExportMode,
     remotePatterns: [

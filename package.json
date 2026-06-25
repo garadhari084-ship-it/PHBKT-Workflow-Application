@@ -9,11 +9,16 @@
     "directories": {
       "output": "dist-electron"
     },
+    "npmRebuild": false,
+    "buildDependenciesFromSource": false,
     "asar": false,
     "files": [
       "main.js",
       ".next/standalone/**/*",
-      ".next/standalone/**/.*"
+      ".next/standalone/**/.*",
+      "!node_modules",
+      "!.next/standalone/node_modules/electron-builder",
+      "!.next/standalone/node_modules/electron"
     ],
     "win": {
       "target": "nsis"
