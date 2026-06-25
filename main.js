@@ -22,9 +22,11 @@ function createWindow() {
     // Choose a free port or default to 3000
     const port = 3000;
     
+    // Set ELECTRON_RUN_AS_NODE to run the electron executable as a Node.js instance
     nextProcess = spawn(process.execPath, [serverPath], {
       env: {
         ...process.env,
+        ELECTRON_RUN_AS_NODE: '1',
         NODE_ENV: 'production',
         PORT: port,
         HOSTNAME: '127.0.0.1',
