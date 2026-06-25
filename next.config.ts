@@ -3,7 +3,7 @@ import type {NextConfig} from 'next';
 const isExportMode = process.env.BUILD_MODE === 'export';
 
 const nextConfig: NextConfig = {
-  output: isExportMode ? "export" : "standalone",
+  output: "standalone",
   /* config options here */
   typescript: {
     ignoreBuildErrors: true,

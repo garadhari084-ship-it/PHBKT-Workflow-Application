@@ -11,7 +11,8 @@
     },
     "files": [
       "main.js",
-      "out/**/*"
+      ".next/standalone/**/*",
+      ".next/standalone/**/.*"
     ],
     "win": {
       "target": "nsis"
@@ -24,7 +25,8 @@
     "build": "cross-env NODE_ENV=production next build",
     "export": "cross-env BUILD_MODE=export next build",
     "build:mobile": "npm run export && npx cap sync",
-    "build:electron": "npm run export && electron-builder",
+    "build:electron-prep": "npm run build && node build-electron.js",
+    "build:electron": "npm run build:electron-prep && electron-builder",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
