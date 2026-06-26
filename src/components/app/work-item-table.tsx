@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import {
   Table,
   TableBody,
@@ -55,7 +55,7 @@ type WorkItemTableProps = {
 };
 
 export default function WorkItemTable({ workItems, users, showActions = false, className }: WorkItemTableProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const firestore = useFirestore();
   const [allocationItem, setAllocationItem] = React.useState<WorkItem | null>(null);
@@ -74,7 +74,7 @@ export default function WorkItemTable({ workItems, users, showActions = false, c
       window.dispatchEvent(new CustomEvent('tabs-update'));
     }
 
-    router.push(`/dashboard/work-item?id=${item.id}`);
+    navigate(`/dashboard/work-item?id=${item.id}`);
   };
 
   const getDisplayStatus = (status: WorkItem['status']): WorkItem['status'] => {

@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useFirestore, useUser } from '@/firebase';
 import { collection, doc, runTransaction, query, where, getDocs, Query, writeBatch } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import {
   Select,
@@ -152,7 +152,7 @@ const NewWorkItemForm = () => {
     const [isSubmitting, setIsSubmitting] = React.useState(false);
     const { user } = useUser();
     const firestore = useFirestore();
-    const router = useRouter();
+    const navigate = useNavigate();
     const { toast } = useToast();
     const [selectedTasks, setSelectedTasks] = React.useState<string[]>([]);
     const [existingCustomerId, setExistingCustomerId] = React.useState<string | null>(null);
@@ -574,7 +574,7 @@ const NewWorkItemForm = () => {
           localStorage.setItem('openWorkItemTabs', JSON.stringify(filteredTabs));
           window.dispatchEvent(new CustomEvent('tabs-update'));
           
-          router.push(newTab.href);
+          navigate(newTab.href);
     
         } catch (error: any) {
             console.error('Work item creation failed:', error);
@@ -590,7 +590,7 @@ const NewWorkItemForm = () => {
         const newTabs = openTabs.filter(tab => tab.href !== '/dashboard/new-work');
         localStorage.setItem('openWorkItemTabs', JSON.stringify(newTabs));
         window.dispatchEvent(new CustomEvent('tabs-update'));
-        router.push(newTabs.length > 0 ? newTabs[newTabs.length - 1].href : '/dashboard');
+        navigate(newTabs.length > 0 ? newTabs[newTabs.length - 1].href : '/dashboard');
     };
     
     return (

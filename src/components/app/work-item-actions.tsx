@@ -23,7 +23,7 @@ import { useFirestore, useUser, errorEmitter, FirestorePermissionError } from '@
 import { doc, updateDoc, runTransaction, collection, writeBatch, getDoc, setDoc } from 'firebase/firestore';
 import type { WorkItem, Note, User, WorkItemStatus, WorkItemTab } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { 
     newBusinessRequestTasks, 
@@ -955,7 +955,7 @@ function CloneWorkItemForm({ workItem, notes, onClose }: { workItem: WorkItem; n
     const firestore = useFirestore();
     const { user } = useUser();
     const { toast } = useToast();
-    const router = useRouter();
+    const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedTasks, setSelectedTasks] = useState<string[]>(workItem.tasks || []);
 
@@ -1109,7 +1109,7 @@ function CloneWorkItemForm({ workItem, notes, onClose }: { workItem: WorkItem; n
                 localStorage.setItem('openWorkItemTabs', JSON.stringify(openTabs));
                 window.dispatchEvent(new CustomEvent('tabs-update'));
                 
-                router.push(newTab.href);
+                navigate(newTab.href);
             }
             
             onClose();

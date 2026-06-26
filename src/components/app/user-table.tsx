@@ -26,7 +26,7 @@ import {
 import { useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 type UserTableProps = {
@@ -34,7 +34,7 @@ type UserTableProps = {
 };
 
 export default function UserTable({ users }: UserTableProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const firestore = useFirestore();
   const { toast } = useToast();
   const [deleteItem, setDeleteItem] = React.useState<User | null>(null);
@@ -88,7 +88,7 @@ export default function UserTable({ users }: UserTableProps) {
 
   const handleModifyClick = (e: React.MouseEvent, user: User) => {
     e.stopPropagation();
-    router.push(`/dashboard/admin/users/edit?id=${user.id}`);
+    navigate(`/dashboard/admin/users/edit?id=${user.id}`);
   };
 
   return (

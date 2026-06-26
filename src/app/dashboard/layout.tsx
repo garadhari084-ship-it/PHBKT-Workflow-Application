@@ -1,25 +1,21 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate, Outlet } from 'react-router-dom';
 import { useUser } from '@/firebase';
 import AppHeader from '@/components/app/header';
 import SubHeader from '@/components/app/sub-header';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout() {
   const { user, isUserLoading } = useUser();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isUserLoading && !user) {
-      router.push('/login');
+      navigate('/login');
     }
-  }, [user, isUserLoading, router]);
+  }, [user, isUserLoading, navigate]);
 
   if (isUserLoading || !user) {
     return (
@@ -51,10 +47,10 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen flex-col">
+    <div className="flex h-screen flex-col w-full overflow-hidden">
       <AppHeader />
       <SubHeader />
-      <main className="flex-1 bg-background flex flex-col min-h-0">{children}</main>
+      <main className="flex-1 bg-background flex flex-col min-h-0 overflow-y-auto"><Outlet /></main>
     </div>
   );
 }

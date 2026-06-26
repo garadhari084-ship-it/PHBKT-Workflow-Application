@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import {
@@ -50,7 +50,7 @@ type EditUserFormProps = {
 
 export default function EditUserForm({ user }: EditUserFormProps) {
   const firestore = useFirestore();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -123,7 +123,7 @@ export default function EditUserForm({ user }: EditUserFormProps) {
           ? `User details for ${user.email} have been updated. Password was not changed as this is not supported.`
           : `User ${user.email} has been updated successfully.`,
       });
-      router.push('/dashboard/admin/users');
+      navigate('/dashboard/admin/users');
     } catch (error: any) {
       console.error("Error updating user:", error);
       const permissionError = new FirestorePermissionError({
@@ -470,7 +470,7 @@ export default function EditUserForm({ user }: EditUserFormProps) {
         </Card>
 
         <div className="flex justify-end gap-2 pt-4">
-          <Button type="button" variant="outline" onClick={() => router.push('/dashboard/admin/users')}>Cancel</Button>
+          <Button type="button" variant="outline" onClick={() => navigate('/dashboard/admin/users')}>Cancel</Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Updating...' : 'Update User'}
           </Button>

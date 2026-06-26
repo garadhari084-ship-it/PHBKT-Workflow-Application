@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import WorkItemTable from '@/components/app/work-item-table';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button';
 
 export default function CompletedWorkItemsPage() {
   const firestore = useFirestore();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const workItemsQuery = useMemoFirebase(() => {
     if (!firestore) return null;
@@ -40,7 +40,7 @@ export default function CompletedWorkItemsPage() {
     <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => router.back()} className="h-8 w-8">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8">
             <ArrowLeft className="h-6 w-6" />
           </Button>
           <h1 className="text-2xl font-bold">Completed Work Items</h1>

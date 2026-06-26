@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'react-router-dom';
 import { useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
 import { doc, collection, query, orderBy, where } from 'firebase/firestore';
 import WorkItemDetails from '@/components/app/work-item-details';
@@ -11,7 +11,7 @@ import { AlertCircle } from 'lucide-react';
 import { useMemo, Suspense } from 'react';
 
 function WorkItemContent() {
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
   const id = searchParams.get('id') as string;
   const firestore = useFirestore();
 

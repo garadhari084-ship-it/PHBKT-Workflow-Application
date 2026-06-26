@@ -1,10 +1,10 @@
 "use client";
 
-import Link from 'next/link';
-import { User as UserIcon, PlusCircle, LogOut } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { User as UserIcon, PlusCircle, LogOut, Settings, UserCircle, HelpCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/app/logo';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import type { WorkItemTab } from '@/lib/types';
 import { useAuth, useUser } from '@/firebase';
 import {
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function AppHeader() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const auth = useAuth();
   const { user } = useUser();
 
@@ -48,7 +48,7 @@ export default function AppHeader() {
       window.dispatchEvent(new CustomEvent('tabs-update'));
     }
 
-    router.push(newWorkTab.href);
+    navigate(newWorkTab.href);
   };
 
   const handleSignOut = async () => {
@@ -61,7 +61,7 @@ export default function AppHeader() {
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-16 md:h-20 items-center justify-between px-2 md:px-4">
         <div className="flex items-center gap-1 md:gap-4 overflow-hidden min-w-0 mr-1 md:mr-2">
-            <Link href="/dashboard" className="flex-shrink-0">
+            <Link to="/dashboard" className="flex-shrink-0">
                 <Logo />
             </Link>
             <div className="flex flex-col items-start gap-0 min-w-0 overflow-hidden">
@@ -87,6 +87,19 @@ export default function AppHeader() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <UserCircle className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <HelpCircle className="mr-2 h-4 w-4" />
+                  <span>Help & Support</span>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>
                   <LogOut className="mr-2 h-4 w-4" />

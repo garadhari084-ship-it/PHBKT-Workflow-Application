@@ -14,8 +14,7 @@ import { useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase
 import type { EnhancedUser } from '@/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 import type { WorkItem } from '@/lib/types';
-import { generateEmail } from '@/ai/flows/generate-email-flow';
-import type { GenerateEmailInput } from '@/ai/flows/generate-email-flow';
+// Removed GenerateEmailInput import
 import { Wand2, Send, ChevronDown } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -79,7 +78,7 @@ export default function EmailComposer({ workItem, user }: EmailComposerProps) {
     }
     setIsGenerating(true);
     try {
-      const input: GenerateEmailInput = {
+      const input = {
         customerName: workItem.customerName || 'Valued Customer',
         agentName: user.firstName || user.displayName || 'Support Agent',
         workType: workItem.workType,
@@ -87,7 +86,15 @@ export default function EmailComposer({ workItem, user }: EmailComposerProps) {
         emailPurpose: template,
         companyName: 'PHBKT Group Limited',
       };
-      const result = await generateEmail(input);
+      const response = await fetch('/api/generate-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to generate email');
+      }
+      const result = await response.json();
       form.setValue('subject', result.subject);
       form.setValue('body', result.body);
       toast({ title: 'AI Generated Content', description: 'Email subject and body have been populated.' });

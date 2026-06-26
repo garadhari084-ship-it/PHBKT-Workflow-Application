@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query } from 'firebase/firestore';
 import type { User, WorkItem, WorkItemStatus } from '@/lib/types';
@@ -29,7 +29,7 @@ type UserAnalytics = {
 
 export default function UsersAnalyticsDashboardPage() {
     const firestore = useFirestore();
-    const router = useRouter();
+    const navigate = useNavigate();
     const { toast } = useToast();
 
     const [filters, setFilters] = useState({
@@ -273,7 +273,7 @@ export default function UsersAnalyticsDashboardPage() {
         <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="icon" onClick={() => router.back()} className="h-8 w-8">
+                    <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8">
                         <ArrowLeft className="h-6 w-6" />
                     </Button>
                     <div>

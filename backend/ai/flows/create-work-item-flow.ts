@@ -7,9 +7,9 @@
  * - CreateWorkItemOutput - The return type for the createWorkItemFromApi function.
  */
 
-import {ai} from '@/ai/genkit';
+import {ai} from '../genkit';
 import {z} from 'genkit';
-import { firestore } from '@/firebase/server';
+import { firestore } from '../../firebase-server';
 import type { Customer, GlobalNote } from '@/lib/types';
 
 const CreateWorkItemInputSchema = z.object({

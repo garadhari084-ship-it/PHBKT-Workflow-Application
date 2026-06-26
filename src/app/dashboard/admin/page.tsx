@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { Briefcase, Users, Upload, FolderMinus, FilePlus, Contact, BarChart2, Link as LinkIcon, Webhook, CheckCircle, IndianRupee } from 'lucide-react';
 import { Card, CardContent, CardTitle, CardHeader, CardDescription } from '@/components/ui/card';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
@@ -11,7 +11,7 @@ import { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 export default function AdminPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const firestore = useFirestore();
 
   const usersQuery = useMemoFirebase(() => {
@@ -90,7 +90,7 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <Card 
             className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-primary/10 hover:border-primary relative overflow-hidden bg-card/60 backdrop-blur-sm"
-            onClick={() => router.push('/dashboard/admin/users')}
+            onClick={() => navigate('/dashboard/admin/users')}
         >
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
             <CardContent className="p-6 flex items-start gap-4">
@@ -110,7 +110,7 @@ export default function AdminPage() {
         </Card>
         <Card 
             className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-primary/10 hover:border-primary relative overflow-hidden bg-card/60 backdrop-blur-sm"
-            onClick={() => router.push('/dashboard/admin/work-items')}
+            onClick={() => navigate('/dashboard/admin/work-items')}
         >
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
             <CardContent className="p-6 flex items-start gap-4">
@@ -130,7 +130,7 @@ export default function AdminPage() {
         </Card>
         <Card 
             className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-primary/10 hover:border-primary relative overflow-hidden bg-card/60 backdrop-blur-sm"
-            onClick={() => router.push('/dashboard/admin/unassigned-work-items')}
+            onClick={() => navigate('/dashboard/admin/unassigned-work-items')}
         >
             <div className="absolute inset-0 bg-gradient-to-br from-destructive/5 to-transparent pointer-events-none" />
             <CardContent className="p-6 flex items-start gap-4">
@@ -150,7 +150,7 @@ export default function AdminPage() {
         </Card>
         <Card 
             className="group cursor-pointer hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-primary/10 hover:border-primary relative overflow-hidden bg-card/60 backdrop-blur-sm"
-            onClick={() => router.push('/dashboard/admin/completed-work')}
+            onClick={() => navigate('/dashboard/admin/completed-work')}
         >
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent pointer-events-none" />
             <CardContent className="p-6 flex items-start gap-4">
@@ -245,7 +245,7 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <Card
             className="group cursor-pointer hover:shadow-md transition-all duration-300 hover:border-primary/50"
-            onClick={() => router.push('/dashboard/admin/payment-transactions')}
+            onClick={() => navigate('/dashboard/admin/payment-transactions')}
         >
             <CardContent className="p-5 flex items-center gap-4">
                 <div className="bg-muted p-2 rounded-lg group-hover:bg-primary/10 transition-colors">
@@ -260,7 +260,7 @@ export default function AdminPage() {
         
         <Card
             className="group cursor-pointer hover:shadow-md transition-all duration-300 hover:border-primary/50"
-            onClick={() => router.push('/dashboard/admin/manage-customer')}
+            onClick={() => navigate('/dashboard/admin/manage-customer')}
         >
             <CardContent className="p-5 flex items-center gap-4">
                 <div className="bg-muted p-2 rounded-lg group-hover:bg-primary/10 transition-colors">
@@ -275,7 +275,7 @@ export default function AdminPage() {
 
         <Card
             className="group cursor-pointer hover:shadow-md transition-all duration-300 hover:border-primary/50"
-            onClick={() => router.push('/dashboard/admin/batch-work-item-create')}
+            onClick={() => navigate('/dashboard/admin/batch-work-item-create')}
         >
             <CardContent className="p-5 flex items-center gap-4">
                 <div className="bg-muted p-2 rounded-lg group-hover:bg-primary/10 transition-colors">
@@ -290,7 +290,7 @@ export default function AdminPage() {
 
         <Card
             className="group cursor-pointer hover:shadow-md transition-all duration-300 hover:border-primary/50"
-            onClick={() => router.push('/dashboard/admin/users-analytics')}
+            onClick={() => navigate('/dashboard/admin/users-analytics')}
         >
             <CardContent className="p-5 flex items-center gap-4">
                 <div className="bg-muted p-2 rounded-lg group-hover:bg-primary/10 transition-colors">
@@ -305,7 +305,7 @@ export default function AdminPage() {
 
         <Card
             className="group cursor-pointer hover:shadow-md transition-all duration-300 hover:border-primary/50"
-            onClick={() => router.push('/dashboard/admin/api-integration')}
+            onClick={() => navigate('/dashboard/admin/api-integration')}
         >
             <CardContent className="p-5 flex items-center gap-4">
                 <div className="bg-muted p-2 rounded-lg group-hover:bg-primary/10 transition-colors">
@@ -320,7 +320,7 @@ export default function AdminPage() {
 
         <Card
             className="group cursor-pointer hover:shadow-md transition-all duration-300 hover:border-primary/50"
-            onClick={() => router.push('/dashboard/admin/web-lead-work-items')}
+            onClick={() => navigate('/dashboard/admin/web-lead-work-items')}
         >
             <CardContent className="p-5 flex items-center gap-4">
                 <div className="bg-muted p-2 rounded-lg group-hover:bg-primary/10 transition-colors">
@@ -335,7 +335,7 @@ export default function AdminPage() {
 
         <Card
             className="group cursor-pointer hover:shadow-md transition-all duration-300 hover:border-primary/50 md:col-span-2 lg:col-span-2"
-            onClick={() => router.push('/dashboard/admin/application-updates')}
+            onClick={() => navigate('/dashboard/admin/application-updates')}
         >
             <CardContent className="p-5 flex items-center gap-4">
                 <div className="bg-muted p-2 rounded-lg group-hover:bg-primary/10 transition-colors">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useUser } from '@/firebase';
 import LoginForm from '@/components/app/login-form';
 import { Logo } from '@/components/app/logo';
@@ -10,13 +10,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function LoginPage() {
   const { user, isUserLoading } = useUser();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isUserLoading && user) {
-      router.push('/dashboard');
+      navigate('/dashboard');
     }
-  }, [user, isUserLoading, router]);
+  }, [user, isUserLoading, navigate]);
 
   if (isUserLoading || user) {
     return (

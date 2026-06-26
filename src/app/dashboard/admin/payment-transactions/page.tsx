@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useFirestore, useCollection, useMemoFirebase, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { collection, query, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import type { WorkItem, Transaction, User } from '@/lib/types';
@@ -11,7 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle, ArrowLeft, FilePenLine, Trash2 } from 'lucide-react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import ClientFormattedDate from '@/components/app/client-formatted-date';
 import WorkItemTable from '@/components/app/work-item-table';
 import { useToast } from '@/hooks/use-toast';
@@ -53,7 +53,7 @@ const transactionSchema = z.object({
 
 export default function PaymentTransactionsPage() {
   const firestore = useFirestore();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { toast } = useToast();
 
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
@@ -214,7 +214,7 @@ export default function PaymentTransactionsPage() {
     <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-8">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => router.back()} className="h-8 w-8">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8">
             <ArrowLeft className="h-6 w-6" />
           </Button>
           <h1 className="text-2xl font-bold">Payment Transactions</h1>
@@ -298,7 +298,7 @@ export default function PaymentTransactionsPage() {
                         return (
                         <TableRow key={workItem.id}>
                             <TableCell className="font-medium">
-                            <Link href={`/dashboard/work-item?id=${workItem.id}`} className="hover:underline text-blue-600">
+                            <Link to={`/dashboard/work-item?id=${workItem.id}`} className="hover:underline text-blue-600">
                                 {workItem.id}
                             </Link>
                             </TableCell>
@@ -352,7 +352,7 @@ export default function PaymentTransactionsPage() {
                                         <ClientFormattedDate date={t.date} formatString="dd-MMM-yyyy" />
                                     </TableCell>
                                     <TableCell className="font-medium">
-                                        <Link href={`/dashboard/work-item?id=${t.workItemId}`} className="hover:underline text-blue-600">
+                                        <Link to={`/dashboard/work-item?id=${t.workItemId}`} className="hover:underline text-blue-600">
                                             {t.workItemId}
                                         </Link>
                                     </TableCell>

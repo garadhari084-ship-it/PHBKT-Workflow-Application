@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -19,7 +19,7 @@ const formSchema = z.object({
 });
 
 export default function ApiIntegrationPage() {
-  const router = useRouter();
+  const navigate = useNavigate();
   const firestore = useFirestore();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -94,7 +94,7 @@ export default function ApiIntegrationPage() {
     <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center gap-4 mb-6">
-          <Button variant="ghost" size="icon" onClick={() => router.back()} className="h-8 w-8">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8">
             <ArrowLeft className="h-6 w-6" />
           </Button>
           <h1 className="text-2xl font-bold">API Integration</h1>

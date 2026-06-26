@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import WorkItemTable from '@/components/app/work-item-table';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query, where } from 'firebase/firestore';
@@ -19,7 +19,7 @@ import { Input } from '@/components/ui/input';
 
 export default function UnassignedWorkItemsPage() {
   const firestore = useFirestore();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const [filters, setFilters] = useState({
     workType: 'all',
@@ -106,7 +106,7 @@ export default function UnassignedWorkItemsPage() {
     <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => router.back()} className="h-8 w-8">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8">
             <ArrowLeft className="h-6 w-6" />
           </Button>
           <h1 className="text-2xl font-bold">New Unassigned Work Items</h1>

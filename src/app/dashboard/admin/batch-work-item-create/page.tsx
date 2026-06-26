@@ -2,7 +2,7 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -38,7 +38,7 @@ type ExcelRow = {
 
 export default function BatchWorkItemCreatePage() {
   const { toast } = useToast();
-  const router = useRouter();
+  const navigate = useNavigate();
   const firestore = useFirestore();
   const { user } = useUser();
   
@@ -342,7 +342,7 @@ export default function BatchWorkItemCreatePage() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-4">
-                <Button variant="ghost" size="icon" onClick={() => router.back()} className="h-8 w-8">
+                <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8">
                     <ArrowLeft className="h-6 w-6" />
                 </Button>
                 <h1 className="text-2xl font-bold">Batch Work Item Create</h1>

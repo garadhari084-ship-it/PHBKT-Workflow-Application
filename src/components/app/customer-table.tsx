@@ -27,8 +27,8 @@ import {
 import { useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import ClientFormattedDate from './client-formatted-date';
 
@@ -37,7 +37,7 @@ type CustomerTableProps = {
 };
 
 export default function CustomerTable({ customers }: CustomerTableProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const firestore = useFirestore();
   const { toast } = useToast();
   const [deleteItem, setDeleteItem] = React.useState<Customer | null>(null);
@@ -84,7 +84,7 @@ export default function CustomerTable({ customers }: CustomerTableProps) {
 
   const handleModifyClick = (e: React.MouseEvent, customer: Customer) => {
     e.stopPropagation();
-    router.push(`/dashboard/admin/manage-customer/edit?id=${customer.id}`);
+    navigate(`/dashboard/admin/manage-customer/edit?id=${customer.id}`);
   };
 
   return (
@@ -106,7 +106,7 @@ export default function CustomerTable({ customers }: CustomerTableProps) {
               {customers.map(customer => (
                 <TableRow key={customer.id}>
                   <TableCell className="font-medium py-0">
-                    <Link href={`/dashboard/admin/manage-customer/view?id=${customer.id}`} className="hover:underline text-blue-600">
+                    <Link to={`/dashboard/admin/manage-customer/view?id=${customer.id}`} className="hover:underline text-blue-600">
                       {customer.id}
                     </Link>
                   </TableCell>

@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
-import Link from 'next/link';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -215,8 +215,8 @@ const EmailTemplate = ({ emailData, workItem, logoUrl, sentByUser }: { emailData
 
 
 export default function WorkItemDetails({ workItem, notes, documents, users, tasks, transactions }: WorkItemDetailsProps) {
-    const router = useRouter();
-    const pathname = usePathname();
+    const navigate = useNavigate();
+    const location = useLocation(); const pathname = location.pathname;
     const { user } = useUser();
     const firestore = useFirestore();
     const { toast } = useToast();
@@ -300,7 +300,7 @@ export default function WorkItemDetails({ workItem, notes, documents, users, tas
         }
     };
 
-    const tabTriggerClassName = "py-1 h-auto rounded-none border-r border-white/20 text-primary-foreground focus-visible:ring-0 focus-visible:ring-offset-0 data-[state=inactive]:bg-primary data-[state=inactive]:hover:bg-primary/90 data-[state=active]:bg-black data-[state=active]:hover:bg-black/90";
+    const tabTriggerClassName = "py-1 px-3 h-auto rounded-none border-r border-white/20 text-primary-foreground focus-visible:ring-0 focus-visible:ring-offset-0 data-[state=inactive]:bg-primary data-[state=inactive]:hover:bg-primary/90 data-[state=active]:bg-black data-[state=active]:hover:bg-black/90 shrink-0";
     
     const handleVerifyClick = () => {
         if (!user) return;
@@ -359,9 +359,9 @@ export default function WorkItemDetails({ workItem, notes, documents, users, tas
 
         // Since we are on the page we are closing, we must navigate away.
         if (newTabs.length > 0) {
-            router.push(newTabs[newTabs.length - 1].href);
+            navigate(newTabs[newTabs.length - 1].href);
         } else {
-            router.push('/dashboard');
+            navigate('/dashboard');
         }
     };
     
@@ -496,7 +496,7 @@ export default function WorkItemDetails({ workItem, notes, documents, users, tas
     };
 
     const handleRefresh = () => {
-        router.refresh();
+        window.location.reload();
         toast({
             title: 'Case Refreshed',
             description: 'The work item details have been updated.',
@@ -809,7 +809,7 @@ export default function WorkItemDetails({ workItem, notes, documents, users, tas
 
                 {/* Tabs Section */}
                 <Tabs defaultValue="overview" className="w-full">
-                    <TabsList className="grid w-full grid-cols-8 h-auto bg-primary p-0 rounded-none border-y border-primary">
+                    <TabsList className="flex flex-wrap justify-start w-full h-auto bg-primary p-0 rounded-none border-y border-primary">
                         <TabsTrigger value="overview" className={tabTriggerClassName}>Work Overview</TabsTrigger>
                         <TabsTrigger value="notes" className={tabTriggerClassName}>Notes</TabsTrigger>
                         <TabsTrigger value="contact" className={tabTriggerClassName}>Contact info</TabsTrigger>

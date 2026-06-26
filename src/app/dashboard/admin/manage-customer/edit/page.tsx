@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'react-router-dom';
 import { useFirestore, useDoc, useMemoFirebase } from '@/firebase';
 import { doc } from 'firebase/firestore';
 import type { Customer } from '@/lib/types';
@@ -12,7 +12,7 @@ import { AlertCircle } from 'lucide-react';
 import { Suspense } from 'react';
 
 function EditCustomerContent() {
-  const searchParams = useSearchParams();
+  const [searchParams] = useSearchParams();
   const id = searchParams.get('id') as string;
   const firestore = useFirestore();
 

@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import UserTable from '@/components/app/user-table';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection, query } from 'firebase/firestore';
@@ -14,7 +14,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function AdminUsersPage() {
   const firestore = useFirestore();
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const usersQuery = useMemoFirebase(() => {
     if (!firestore) return null;
@@ -31,12 +31,12 @@ export default function AdminUsersPage() {
     <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => router.back()} className="h-8 w-8">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8">
             <ArrowLeft className="h-6 w-6" />
           </Button>
           <h1 className="text-2xl font-bold">All Users</h1>
         </div>
-        <Link href="/dashboard/admin/users/new" passHref>
+        <Link to="/dashboard/admin/users/new">
           <Button>
             <PlusCircle className="mr-2 h-4 w-4" />
             Create User

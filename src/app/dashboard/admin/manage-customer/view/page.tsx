@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
 import { doc, collection, query, where } from 'firebase/firestore';
 import type { Customer, WorkItem, Transaction, User } from '@/lib/types';
@@ -13,11 +13,11 @@ import { useMemo, Suspense } from 'react';
 import WorkItemTable from '@/components/app/work-item-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import ClientFormattedDate from '@/components/app/client-formatted-date';
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 
 function ViewCustomerContent() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const id = searchParams.get('id') as string;
   const firestore = useFirestore();
 
@@ -119,12 +119,12 @@ function ViewCustomerContent() {
     <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6">
         <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => router.back()} className="h-8 w-8">
+            <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8">
                 <ArrowLeft className="h-6 w-6" />
             </Button>
             <h1 className="text-2xl font-bold">Customer Details: {customer.name}</h1>
             </div>
-            <Button onClick={() => router.push(`/dashboard/admin/manage-customer/edit?id=${customer.id}`)}>
+            <Button onClick={() => navigate(`/dashboard/admin/manage-customer/edit?id=${customer.id}`)}>
                 Edit Customer
             </Button>
         </div>
@@ -200,7 +200,7 @@ function ViewCustomerContent() {
                                     <ClientFormattedDate date={transaction.date} formatString="dd-MMM-yyyy" />
                                 </TableCell>
                                 <TableCell>
-                                    <Link href={`/dashboard/work-item?id=${transaction.workItemId}`} className="hover:underline text-blue-600">
+                                    <Link to={`/dashboard/work-item?id=${transaction.workItemId}`} className="hover:underline text-blue-600">
                                         {transaction.workItemId}
                                     </Link>
                                 </TableCell>

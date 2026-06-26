@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -34,7 +34,7 @@ type EditCustomerFormProps = {
 
 export default function EditCustomerForm({ customer }: EditCustomerFormProps) {
   const firestore = useFirestore();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -78,7 +78,7 @@ export default function EditCustomerForm({ customer }: EditCustomerFormProps) {
         title: 'Customer Updated',
         description: `Customer ${customer.name} has been updated successfully.`,
       });
-      router.push('/dashboard/admin/manage-customer');
+      navigate('/dashboard/admin/manage-customer');
     } catch (error: any) {
       console.error("Error updating customer:", error);
       const permissionError = new FirestorePermissionError({
@@ -223,7 +223,7 @@ export default function EditCustomerForm({ customer }: EditCustomerFormProps) {
         </Card>
 
         <div className="flex justify-end gap-2 pt-4">
-          <Button type="button" variant="outline" onClick={() => router.push('/dashboard/admin/manage-customer')}>Cancel</Button>
+          <Button type="button" variant="outline" onClick={() => navigate('/dashboard/admin/manage-customer')}>Cancel</Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Updating...' : 'Update Customer'}
           </Button>

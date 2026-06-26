@@ -8,7 +8,7 @@ import { firebaseConfig } from '@/firebase/config';
 import { initializeApp, deleteApp } from 'firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
 import { doc, setDoc, runTransaction } from 'firebase/firestore';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -41,7 +41,7 @@ const formSchema = z.object({
 
 export default function NewUserForm() {
   const firestore = useFirestore();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEmailEditable, setIsEmailEditable] = useState(false);
@@ -176,7 +176,7 @@ export default function NewUserForm() {
         description: `User ${values.email} has been created.`,
       });
         
-      router.push('/dashboard/admin/users');
+      navigate('/dashboard/admin/users');
       
     } catch (error: any) {
       console.error("Error creating user:", error);
@@ -569,7 +569,7 @@ export default function NewUserForm() {
             </Card>
 
             <div className="flex justify-end gap-2 pt-4">
-              <Button type="button" variant="outline" onClick={() => router.push('/dashboard/admin/users')}>Cancel</Button>
+              <Button type="button" variant="outline" onClick={() => navigate('/dashboard/admin/users')}>Cancel</Button>
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Creating...' : 'Create User'}
               </Button>
