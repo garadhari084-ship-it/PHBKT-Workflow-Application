@@ -2,7 +2,6 @@
   "name": "nextn",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "main": "main.js",
   "build": {
     "appId": "com.phbkt.workflow",
