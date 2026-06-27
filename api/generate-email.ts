@@ -1,5 +1,4 @@
-import { generateEmail } from "../backend/ai/flows/generate-email-flow";
-import { firestore } from "../backend/firebase-server";
+export const maxDuration = 60;
 
 export default async function handler(req: any, res: any) {
   // CORS setup
@@ -23,6 +22,9 @@ export default async function handler(req: any, res: any) {
   try {
     const { geminiApiKey, ...restBody } = req.body;
       
+    // Dynamically import to prevent module load crashes on Vercel
+    const { firestore } = await import("../backend/firebase-server");
+
     if (geminiApiKey) {
       process.env.GEMINI_API_KEY = geminiApiKey;
     } else if (firestore) {
@@ -41,6 +43,8 @@ export default async function handler(req: any, res: any) {
     if (!process.env.GEMINI_API_KEY) {
       return res.status(500).json({ error: "Gemini API Key is not configured. Please add it in the Admin Panel under API Integration or in your environment variables." });
     }
+
+    const { generateEmail } = await import("../backend/ai/flows/generate-email-flow");
 
     const result = await generateEmail(restBody);
     return res.status(200).json(result);
