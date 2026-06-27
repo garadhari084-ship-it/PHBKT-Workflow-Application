@@ -80,10 +80,10 @@ export default function EmailComposer({ workItem, user }: EmailComposerProps) {
     try {
       const input = {
         customerName: workItem.customerName || 'Valued Customer',
-        agentName: user.firstName || user.displayName || 'Support Agent',
-        workType: workItem.workType,
-        task: workItem.tasks?.[0] || template,
-        emailPurpose: template,
+        agentName: user.firstName || user.displayName || user.email || 'Support Agent',
+        workType: workItem.workType || 'General Inquiry',
+        task: workItem.tasks?.[0] || template || 'General Support',
+        emailPurpose: template || 'Communication',
         companyName: 'PHBKT Group Limited',
       };
       const response = await fetch('/api/generate-email', {

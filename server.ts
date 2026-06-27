@@ -33,10 +33,14 @@ async function startServer() {
       }
 
       const input = {
+        product: body.product || body.details,
         customerName: body.customerName,
         customerEmail: body.customerEmail,
         customerPhone: body.customerPhone,
-        details: body.details,
+        city: body.city,
+        businessName: body.businessName,
+        tasks: body.tasks,
+        leadType: body.leadType,
       };
 
       const result = await createWorkItemFromApi(input);
