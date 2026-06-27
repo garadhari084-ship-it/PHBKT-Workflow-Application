@@ -63,6 +63,10 @@ const createWorkItemFlow = ai.defineFlow(
     outputSchema: CreateWorkItemOutputSchema,
   },
   async (input) => {
+    if (!firestore) {
+        throw new Error('Firestore is not initialized. Check your environment variables.');
+    }
+    
     const {
         product,
         leadType,
