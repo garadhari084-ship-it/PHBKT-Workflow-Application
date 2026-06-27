@@ -25,18 +25,16 @@ export default async function handler(req: any, res: any) {
       
     if (geminiApiKey) {
       process.env.GEMINI_API_KEY = geminiApiKey;
-    } else if (!process.env.GEMINI_API_KEY) {
-      if (process.env.GOOGLE_APPLICATION_CREDENTIALS && firestore) {
-        try {
-          const configRef = firestore.collection("app_config").doc("main");
-          const configSnap = await configRef.get();
-          const configData = configSnap.data();
-          if (configData?.geminiApiKey) {
-            process.env.GEMINI_API_KEY = configData.geminiApiKey;
-          }
-        } catch (e) {
-          console.warn("Could not fetch config from Firestore", e);
+    } else if (firestore) {
+      try {
+        const configRef = firestore.collection("app_config").doc("main");
+        const configSnap = await configRef.get();
+        const configData = configSnap.data();
+        if (configData?.geminiApiKey) {
+          process.env.GEMINI_API_KEY = configData.geminiApiKey;
         }
+      } catch (e) {
+        console.warn("Could not fetch config from Firestore", e);
       }
     }
 
@@ -48,6 +46,16 @@ export default async function handler(req: any, res: any) {
     return res.status(200).json(result);
   } catch (error: any) {
     console.error("API Route Error:", error);
+    
+    // Check if the error is a rate limit/quota error from Gemini
+    const errorDetails = error.message || "";
+    if (errorDetails.includes("429 Too Many Requests") || errorDetails.includes("Quota exceeded")) {
+      return res.status(429).json({ 
+        error: "Rate Limit Exceeded", 
+        details: "The free tier limit for the AI model has been reached. Please wait a minute before trying again, or configure your own Gemini API Key in the Admin Panel." 
+      });
+    }
+
     return res.status(500).json({ error: "Failed to generate email", details: error.message, stack: error.stack });
   }
 }

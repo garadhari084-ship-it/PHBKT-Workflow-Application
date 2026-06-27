@@ -62,6 +62,15 @@ export default async function handler(req: any, res: any) {
     return res.status(200).json({ success: true, workItem: result });
   } catch (error: any) {
     console.error("API Route Error:", error);
+
+    const errorDetails = error.message || "";
+    if (errorDetails.includes("429 Too Many Requests") || errorDetails.includes("Quota exceeded")) {
+      return res.status(429).json({ 
+        error: "Rate Limit Exceeded", 
+        details: "The free tier limit for the AI model has been reached. Please wait a minute before trying again, or configure your own Gemini API Key in the Admin Panel." 
+      });
+    }
+
     return res.status(500).json({ error: "Failed to create work item", details: error.message });
   }
 }

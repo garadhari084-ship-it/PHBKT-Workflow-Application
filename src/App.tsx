@@ -25,6 +25,7 @@ import Page_dashboard_work_item from './app/dashboard/work-item/page';
 import Page_login from './app/login/page';
 import Page__ from './app/page';
 import { FirebaseClientProvider } from './firebase/client-provider';
+import { Toaster } from '@/components/ui/toaster';
 
 export default function App() {
   return (
@@ -60,6 +61,7 @@ export default function App() {
           </Route>
         </Routes>
       </HashRouter>
+      <Toaster />
     </FirebaseClientProvider>
   );
 }

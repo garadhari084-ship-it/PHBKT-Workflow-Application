@@ -100,8 +100,19 @@ export default function EmailComposer({ workItem, user }: EmailComposerProps) {
         body: JSON.stringify(input),
       });
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to generate email');
+        let errorMsg = 'Failed to generate email';
+        try {
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const errorData = await response.json();
+            errorMsg = errorData.details ? `${errorData.error}: ${errorData.details}` : (errorData.error || errorMsg);
+          } else {
+            errorMsg = await response.text();
+          }
+        } catch(e) {
+          errorMsg = response.statusText;
+        }
+        throw new Error(errorMsg);
       }
       const result = await response.json();
       form.setValue('subject', result.subject);
@@ -170,7 +181,7 @@ export default function EmailComposer({ workItem, user }: EmailComposerProps) {
         requestResourceData: newDocumentPayload,
       });
       errorEmitter.emit('permission-error', permissionError);
-      toast({ variant: 'destructive', title: 'Action Failed', description: 'Could not open email client or save the email. You may not have permissions.' });
+      toast({ variant: 'destructive', title: 'Action Failed', description: error instanceof Error ? error.message : 'Could not open email client or save the email.' });
     } finally {
       setIsSending(false);
     }
