@@ -88,7 +88,7 @@ app.post("/api/generate-email", async (req, res) => {
   }
 });
 
-app.all("*", (req, res) => {
+app.all("*all", (req, res) => {
   res.status(404).json({
     error: "Not Found",
     method: req.method,
