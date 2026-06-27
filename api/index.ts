@@ -9,8 +9,8 @@ app.use(express.json());
 
 app.post("/api/create-work-item", async (req, res) => {
   try {
-    if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-      res.status(500).json({ error: "Server missing GOOGLE_APPLICATION_CREDENTIALS. External API integration requires Firebase Admin credentials." });
+    if (!process.env.GOOGLE_APPLICATION_CREDENTIALS || !firestore) {
+      res.status(500).json({ error: "Server missing GOOGLE_APPLICATION_CREDENTIALS or Firebase Admin failed to initialize." });
       return;
     }
     const configRef = firestore.collection("app_config").doc("main");
@@ -61,7 +61,7 @@ app.post("/api/generate-email", async (req, res) => {
     if (geminiApiKey) {
       process.env.GEMINI_API_KEY = geminiApiKey;
     } else if (!process.env.GEMINI_API_KEY) {
-      if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+      if (process.env.GOOGLE_APPLICATION_CREDENTIALS && firestore) {
         try {
           const configRef = firestore.collection("app_config").doc("main");
           const configSnap = await configRef.get();
@@ -86,6 +86,16 @@ app.post("/api/generate-email", async (req, res) => {
     console.error("API Route Error:", error);
     res.status(500).json({ error: "Failed to generate email", details: error.message, stack: error.stack });
   }
+});
+
+app.all("*", (req, res) => {
+  res.status(404).json({
+    error: "Not Found",
+    method: req.method,
+    url: req.url,
+    originalUrl: req.originalUrl,
+    path: req.path
+  });
 });
 
 export default app;

@@ -14,10 +14,13 @@ export function getAdminFirestore(): Firestore {
         if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
           try {
             const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+            if (serviceAccount.private_key) {
+              serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+            }
             credential = cert(serviceAccount);
             projectId = serviceAccount.project_id;
-          } catch (e) {
-            console.warn("Could not parse GOOGLE_APPLICATION_CREDENTIALS as JSON, ignoring or treating as path.");
+          } catch (e: any) {
+            console.warn("Could not parse GOOGLE_APPLICATION_CREDENTIALS as JSON, ignoring or treating as path.", e.message);
           }
         }
         initializeApp({
@@ -34,4 +37,9 @@ export function getAdminFirestore(): Firestore {
   return _firestore;
 }
 
-export const firestore = getAdminFirestore();
+export let firestore: Firestore | null = null;
+try {
+  firestore = getAdminFirestore();
+} catch (e: any) {
+  console.warn("Firestore failed to initialize on startup:", e.message);
+}

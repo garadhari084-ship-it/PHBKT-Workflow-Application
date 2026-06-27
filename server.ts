@@ -14,8 +14,8 @@ async function startServer() {
   // API endpoints
   app.post("/api/create-work-item", async (req, res) => {
     try {
-      if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-        res.status(500).json({ error: "Server missing GOOGLE_APPLICATION_CREDENTIALS. External API integration requires Firebase Admin credentials." });
+      if (!process.env.GOOGLE_APPLICATION_CREDENTIALS || !firestore) {
+        res.status(500).json({ error: "Server missing GOOGLE_APPLICATION_CREDENTIALS or Firebase Admin failed to initialize." });
         return;
       }
       const configRef = firestore.collection("app_config").doc("main");
@@ -68,7 +68,7 @@ async function startServer() {
       } else if (!process.env.GEMINI_API_KEY) {
         // Fallback for non-client calls (e.g. testing) that might rely on the DB
         // But only if we have credentials set
-        if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+        if (process.env.GOOGLE_APPLICATION_CREDENTIALS && firestore) {
           try {
             const configRef = firestore.collection("app_config").doc("main");
             const configSnap = await configRef.get();
