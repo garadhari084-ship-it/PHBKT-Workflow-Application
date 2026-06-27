@@ -63,7 +63,8 @@ const createWorkItemFlow = ai.defineFlow(
     outputSchema: CreateWorkItemOutputSchema,
   },
   async (input) => {
-    if (!firestore) {
+    const db = firestore;
+    if (!db) {
         throw new Error('Firestore is not initialized. Check your environment variables.');
     }
     
@@ -88,7 +89,7 @@ const createWorkItemFlow = ai.defineFlow(
     let customerId: string;
     let isNewCustomer = false;
 
-    const customersRef = firestore.collection("customers");
+    const customersRef = db.collection("customers");
     const q = customersRef.where("phone", "==", fullPhoneNumber);
     const customerQuerySnapshot = await q.get();
 
@@ -99,17 +100,17 @@ const createWorkItemFlow = ai.defineFlow(
         customerId = customerQuerySnapshot.docs[0].id;
     }
 
-    const newWorkItemId = await firestore.runTransaction(async (transaction) => {
+    const newWorkItemId = await db.runTransaction(async (transaction) => {
         const prefix = getWorkTypePrefix(workType);
         const counterId = `work_items_${prefix}`;
-        const counterRef = firestore.doc(`counters/${counterId}`);
+        const counterRef = db.doc(`counters/${counterId}`);
         const counterDoc = await transaction.get(counterRef);
 
         const newCount = counterDoc.exists ? (counterDoc.data()?.value || 0) + 1 : 1;
         const numericId = String(newCount).padStart(7, '0');
         const customId = `${prefix}-${numericId}`;
 
-        const newWorkItemRef = firestore.collection('work_items').doc(customId);
+        const newWorkItemRef = db.collection('work_items').doc(customId);
         
         const newWorkItemData = {
           id: customId,
@@ -139,7 +140,7 @@ const createWorkItemFlow = ai.defineFlow(
         transaction.set(newWorkItemRef, newWorkItemData);
 
         if (isNewCustomer) {
-            const newCustomerRef = firestore.doc(`customers/${customerId}`);
+            const newCustomerRef = db.doc(`customers/${customerId}`);
             const newCustomerData: Partial<Customer> = {
                 id: customerId,
                 name: customerName,
@@ -156,13 +157,13 @@ const createWorkItemFlow = ai.defineFlow(
     });
 
     if (!isNewCustomer) {
-        const globalNotesQuery = firestore.collection("global_notes").where("customerId", "==", customerId);
+        const globalNotesQuery = db.collection("global_notes").where("customerId", "==", customerId);
         const globalNotesSnapshot = await globalNotesQuery.get();
         if (!globalNotesSnapshot.empty) {
-            const noteBatch = firestore.batch();
+            const noteBatch = db.batch();
             globalNotesSnapshot.forEach(globalNoteDoc => {
                 const globalNoteData = globalNoteDoc.data() as GlobalNote;
-                const newNoteRef = firestore.collection(`work_items/${newWorkItemId}/notes`).doc();
+                const newNoteRef = db.collection(`work_items/${newWorkItemId}/notes`).doc();
                 noteBatch.set(newNoteRef, {
                     id: newNoteRef.id, workItemId: newWorkItemId, authorId: globalNoteData.authorId,
                     date: globalNoteData.date, text: globalNoteData.text, category: 'Global Note',
