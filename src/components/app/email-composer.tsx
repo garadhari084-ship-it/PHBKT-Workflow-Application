@@ -85,16 +85,6 @@ export default function EmailComposer({ workItem, user }: EmailComposerProps) {
         geminiApiKey = configSnap.data()?.geminiApiKey;
       }
 
-      if (!geminiApiKey) {
-        toast({
-          variant: 'destructive',
-          title: 'Configuration Missing',
-          description: 'Gemini AI API Key is not configured. Please add it in the Admin Panel under API Integration.',
-        });
-        setIsGenerating(false);
-        return;
-      }
-
       const input = {
         customerName: workItem.customerName || 'Valued Customer',
         agentName: user.firstName || user.displayName || user.email || 'Support Agent',
@@ -102,7 +92,7 @@ export default function EmailComposer({ workItem, user }: EmailComposerProps) {
         task: workItem.tasks?.[0] || template || 'General Support',
         emailPurpose: template || 'Communication',
         companyName: 'PHBKT Group Limited',
-        geminiApiKey,
+        ...(geminiApiKey && { geminiApiKey }),
       };
       const response = await fetch('/api/generate-email', {
         method: 'POST',
@@ -110,15 +100,16 @@ export default function EmailComposer({ workItem, user }: EmailComposerProps) {
         body: JSON.stringify(input),
       });
       if (!response.ok) {
-        throw new Error('Failed to generate email');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to generate email');
       }
       const result = await response.json();
       form.setValue('subject', result.subject);
       form.setValue('body', result.body);
       toast({ title: 'AI Generated Content', description: 'Email subject and body have been populated.' });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating email:', error);
-      toast({ variant: 'destructive', title: 'Generation Failed', description: 'Could not generate email content.' });
+      toast({ variant: 'destructive', title: 'Generation Failed', description: error.message || 'Could not generate email content.' });
     } finally {
       setIsGenerating(false);
     }

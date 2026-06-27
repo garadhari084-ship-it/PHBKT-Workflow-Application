@@ -65,21 +65,25 @@ async function startServer() {
       
       if (geminiApiKey) {
         process.env.GEMINI_API_KEY = geminiApiKey;
-      } else {
+      } else if (!process.env.GEMINI_API_KEY) {
         // Fallback for non-client calls (e.g. testing) that might rely on the DB
         // But only if we have credentials set
         if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-          const configRef = firestore.collection("app_config").doc("main");
-          const configSnap = await configRef.get();
-          const configData = configSnap.data();
-          if (configData?.geminiApiKey) {
-            process.env.GEMINI_API_KEY = configData.geminiApiKey;
+          try {
+            const configRef = firestore.collection("app_config").doc("main");
+            const configSnap = await configRef.get();
+            const configData = configSnap.data();
+            if (configData?.geminiApiKey) {
+              process.env.GEMINI_API_KEY = configData.geminiApiKey;
+            }
+          } catch (e) {
+            console.warn("Could not fetch config from Firestore", e);
           }
         }
       }
 
       if (!process.env.GEMINI_API_KEY) {
-        res.status(500).json({ error: "Gemini API Key is not configured. Please add it in the Admin Panel under API Integration." });
+        res.status(500).json({ error: "Gemini API Key is not configured. Please add it in the Admin Panel under API Integration or in your environment variables." });
         return;
       }
 
