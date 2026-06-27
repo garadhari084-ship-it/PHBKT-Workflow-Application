@@ -1,4 +1,5 @@
-export const maxDuration = 60;
+import { firestore } from "../backend/firebase-server";
+import { createWorkItemFromApi } from "../backend/ai/flows/create-work-item-flow";
 
 export default async function handler(req: any, res: any) {
   // CORS setup
@@ -20,8 +21,6 @@ export default async function handler(req: any, res: any) {
   }
 
   try {
-    const { firestore } = await import("../backend/firebase-server");
-
     if (!process.env.GOOGLE_APPLICATION_CREDENTIALS || !firestore) {
       res.status(500).json({ error: "Server missing GOOGLE_APPLICATION_CREDENTIALS or Firebase Admin failed to initialize." });
       return;
@@ -58,8 +57,6 @@ export default async function handler(req: any, res: any) {
       tasks: body.tasks,
       leadType: body.leadType,
     };
-
-    const { createWorkItemFromApi } = await import("../backend/ai/flows/create-work-item-flow");
 
     const result = await createWorkItemFromApi(input);
     return res.status(200).json({ success: true, workItem: result });
