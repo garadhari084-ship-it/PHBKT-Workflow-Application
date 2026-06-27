@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase';
 import type { EnhancedUser } from '@/firebase';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc } from 'firebase/firestore';
 import type { WorkItem } from '@/lib/types';
 // Removed GenerateEmailInput import
 import { Wand2, Send, ChevronDown } from 'lucide-react';
@@ -78,6 +78,23 @@ export default function EmailComposer({ workItem, user }: EmailComposerProps) {
     }
     setIsGenerating(true);
     try {
+      let geminiApiKey;
+      if (firestore) {
+        const configRef = doc(firestore, 'app_config/main');
+        const configSnap = await getDoc(configRef);
+        geminiApiKey = configSnap.data()?.geminiApiKey;
+      }
+
+      if (!geminiApiKey) {
+        toast({
+          variant: 'destructive',
+          title: 'Configuration Missing',
+          description: 'Gemini AI API Key is not configured. Please add it in the Admin Panel under API Integration.',
+        });
+        setIsGenerating(false);
+        return;
+      }
+
       const input = {
         customerName: workItem.customerName || 'Valued Customer',
         agentName: user.firstName || user.displayName || user.email || 'Support Agent',
@@ -85,6 +102,7 @@ export default function EmailComposer({ workItem, user }: EmailComposerProps) {
         task: workItem.tasks?.[0] || template || 'General Support',
         emailPurpose: template || 'Communication',
         companyName: 'PHBKT Group Limited',
+        geminiApiKey,
       };
       const response = await fetch('/api/generate-email', {
         method: 'POST',

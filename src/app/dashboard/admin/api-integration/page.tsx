@@ -9,13 +9,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Key, Terminal, Copy, Check } from 'lucide-react';
+import { ArrowLeft, Key, Terminal, Copy, Check, Sparkles } from 'lucide-react';
 import { useFirestore, useDoc, useMemoFirebase, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 const formSchema = z.object({
-  apiKey: z.string().min(1, 'API Key is required.'),
+  apiKey: z.string().min(1, 'External API Key is required.'),
+  geminiApiKey: z.string().optional(),
 });
 
 export default function ApiIntegrationPage() {
@@ -30,16 +31,17 @@ export default function ApiIntegrationPage() {
     return doc(firestore, 'app_config/main');
   }, [firestore]);
 
-  const { data: config, isLoading } = useDoc<{ externalApiKey?: string }>(configRef);
+  const { data: config, isLoading } = useDoc<{ externalApiKey?: string; geminiApiKey?: string }>(configRef);
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { apiKey: '' },
+    defaultValues: { apiKey: '', geminiApiKey: '' },
   });
 
   useEffect(() => {
-    if (config?.externalApiKey) {
-      form.setValue('apiKey', config.externalApiKey);
+    if (config) {
+      form.setValue('apiKey', config.externalApiKey || '');
+      form.setValue('geminiApiKey', config.geminiApiKey || '');
     }
   }, [config, form]);
   
@@ -49,15 +51,18 @@ export default function ApiIntegrationPage() {
     
     setIsSubmitting(true);
 
-    const payload = { externalApiKey: values.apiKey };
+    const payload = { 
+        externalApiKey: values.apiKey,
+        geminiApiKey: values.geminiApiKey || null
+    };
     try {
       await setDoc(configRef, payload, { merge: true });
       toast({
-        title: 'API Key Updated',
-        description: 'The external API key has been saved.',
+        title: 'API Keys Updated',
+        description: 'Your API keys have been saved successfully.',
       });
     } catch (error) {
-        console.error("Error updating API key:", error);
+        console.error("Error updating API keys:", error);
         const permissionError = new FirestorePermissionError({
           path: configRef.path,
           operation: 'update',
@@ -67,7 +72,7 @@ export default function ApiIntegrationPage() {
         toast({
           variant: 'destructive',
           title: 'Update Failed',
-          description: 'Could not save the API key. You may not have permissions.',
+          description: 'Could not save the API keys. You may not have permissions.',
         });
     } finally {
       setIsSubmitting(false);
@@ -113,23 +118,44 @@ export default function ApiIntegrationPage() {
             </CardHeader>
             <CardContent>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                         <FormField
                             control={form.control}
                             name="apiKey"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>External API Key</FormLabel>
-                                    <div className="flex gap-2">
-                                        <FormControl>
-                                            <Input {...field} placeholder={isLoading ? 'Loading...' : 'Paste your API key here...'} />
-                                        </FormControl>
-                                        <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : 'Save Key'}</Button>
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Key className="h-4 w-4 text-muted-foreground" />
+                                        <FormLabel className="m-0">External API Key</FormLabel>
                                     </div>
+                                    <FormControl>
+                                        <Input {...field} placeholder={isLoading ? 'Loading...' : 'Paste your API key here...'} />
+                                    </FormControl>
+                                    <CardDescription>This key is used to authenticate requests to the Work Item Creation API.</CardDescription>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="geminiApiKey"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Sparkles className="h-4 w-4 text-primary" />
+                                        <FormLabel className="m-0">Gemini AI API Key</FormLabel>
+                                    </div>
+                                    <FormControl>
+                                        <Input type="password" {...field} placeholder={isLoading ? 'Loading...' : 'Paste your Gemini API key here...'} />
+                                    </FormControl>
+                                    <CardDescription>Required for AI features like email generation. Get yours from Google AI Studio.</CardDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <div className="flex justify-end">
+                            <Button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Saving...' : 'Save Keys'}</Button>
+                        </div>
                     </form>
                 </Form>
             </CardContent>

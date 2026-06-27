@@ -174,7 +174,7 @@ service cloud.firestore {
      * @principle Allow global read for public settings, restrict writes to admins.
      */
     match /app_config/{configId} {
-      allow read: if true;
+      allow read: if isSignedIn();
       allow write: if isAdmin();
     }
   }
