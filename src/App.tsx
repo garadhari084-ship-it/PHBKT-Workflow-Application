@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import Page_dashboard_admin_api_integration from './app/dashboard/admin/api-integration/page';
 import Page_dashboard_admin_application_updates from './app/dashboard/admin/application-updates/page';
 import Page_dashboard_admin_batch_work_item_create from './app/dashboard/admin/batch-work-item-create/page';
@@ -29,7 +29,7 @@ import { FirebaseClientProvider } from './firebase/client-provider';
 export default function App() {
   return (
     <FirebaseClientProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<Page__ />} />
           <Route path="/login" element={<Page_login />} />
@@ -59,7 +59,7 @@ export default function App() {
             <Route path="work-item" element={<Page_dashboard_work_item />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </FirebaseClientProvider>
   );
 }
