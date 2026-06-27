@@ -198,7 +198,7 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="w-full bg-background flex-1 overflow-y-auto pt-2 px-4 space-y-2 font-calibri-light">
+    <div className="w-full bg-background flex-1 overflow-y-auto pt-2 px-2 md:px-4 space-y-2 font-calibri-light">
       <div className="space-y-0">
         <h1 className="text-xl font-bold">Search Work Items</h1>
         <p className="text-sm text-muted-foreground">

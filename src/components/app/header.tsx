@@ -58,10 +58,10 @@ export default function AppHeader() {
 
 
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="flex h-16 md:h-20 items-center justify-between px-2 md:px-4">
+    <header className="flex-shrink-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex h-16 md:h-20 items-center justify-between pl-0 pr-2 md:pr-4">
         <div className="flex items-center gap-1 md:gap-4 overflow-hidden min-w-0 mr-1 md:mr-2">
-            <Link to="/dashboard" className="flex-shrink-0">
+            <Link to="/dashboard" className="flex-shrink-0 -ml-1 md:ml-0">
                 <Logo />
             </Link>
             <div className="flex flex-col items-start gap-0 min-w-0 overflow-hidden">

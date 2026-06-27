@@ -17,7 +17,9 @@ const allNavLinks = [
 ];
 
 export default function SubHeader() {
-  const location = useLocation(); const pathname = location.pathname;
+  const location = useLocation(); 
+  const pathname = location.pathname;
+  const fullPath = location.pathname + location.search;
   const navigate = useNavigate();
   const { user } = useUser();
   const [isClient, setIsClient] = useState(false);
@@ -82,7 +84,7 @@ export default function SubHeader() {
     window.dispatchEvent(new CustomEvent('tabs-update'));
 
 
-    if (pathname === tabToClose.href) {
+    if (fullPath === tabToClose.href) {
         if (newTabs.length > 0) {
             navigate(newTabs[newTabs.length - 1].href);
         } else {
@@ -91,11 +93,11 @@ export default function SubHeader() {
     }
   };
 
-  const isWorkItemTabActive = isClient && workItemTabs.some(tab => tab.href === pathname);
+  const isWorkItemTabActive = isClient && workItemTabs.some(tab => tab.href === fullPath);
 
   return (
-    <div className="sticky top-20 z-40 bg-background shadow-sm w-full border-b-[1px] border-primary">
-        <nav className="flex items-end flex-wrap no-scrollbar tap-highlight-transparent w-full">
+    <div className="flex-shrink-0 z-40 bg-background shadow-sm w-full border-b-[1px] border-primary">
+        <nav className="flex items-end overflow-x-auto no-scrollbar tap-highlight-transparent w-full">
           {navLinks.map((link) => {
             let isActive = false;
             if (isClient && !isWorkItemTabActive) {
@@ -118,10 +120,10 @@ export default function SubHeader() {
                 key={link.href}
                 to={link.href}
                 className={cn(
-                  'flex items-center whitespace-nowrap px-3 py-1 text-sm font-medium border-r border-white/20 text-primary-foreground shrink-0',
+                  'flex items-center whitespace-nowrap px-3 py-1 text-sm font-medium border-r border-b border-white/20 text-primary-foreground shrink-0',
                   isActive
-                    ? 'bg-black hover:bg-black/90'
-                    : 'bg-primary hover:bg-primary/90'
+                    ? 'bg-black text-white hover:bg-black/90'
+                    : 'bg-primary text-primary-foreground hover:bg-primary/90'
                 )}
               >
                 {link.label}
@@ -129,16 +131,16 @@ export default function SubHeader() {
             );
           })}
           {isClient && workItemTabs.map((link) => {
-            const isActive = pathname === link.href;
+            const isActive = fullPath === link.href;
             return (
               <Link
                 key={link.href}
                 to={link.href}
                 className={cn(
-                  'flex items-center whitespace-nowrap px-3 py-1 text-sm font-medium border-r border-white/20 text-primary-foreground shrink-0',
+                  'flex items-center whitespace-nowrap px-3 py-1 text-sm font-medium border-r border-b border-white/20 text-primary-foreground shrink-0',
                   isActive
-                    ? 'bg-black hover:bg-black/90'
-                    : 'bg-primary hover:bg-primary/90',
+                    ? 'bg-black text-white hover:bg-black/90'
+                    : 'bg-primary text-primary-foreground hover:bg-primary/90',
                   'pr-2'
                 )}
               >

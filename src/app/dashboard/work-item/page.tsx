@@ -67,7 +67,7 @@ function WorkItemContent() {
 
   if (error) {
     return (
-      <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="w-full px-2 py-4 space-y-4">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
@@ -81,7 +81,7 @@ function WorkItemContent() {
 
   if (isLoading) {
     return (
-      <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="w-full px-2 py-4 space-y-4">
         <Skeleton className="h-24 w-full" />
         <Skeleton className="h-10 w-full" />
         <div className="grid grid-cols-2 gap-4">

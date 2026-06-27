@@ -80,7 +80,7 @@ export default function AdminPage() {
   const COLORS = ['#0ea5e9', '#22c55e', '#f59e0b', '#ec4899', '#8b5cf6', '#64748b'];
 
   return (
-    <div className="w-full bg-muted/20 flex-1 overflow-y-auto py-6 px-4 md:px-8 space-y-8 pb-16">
+    <div className="w-full bg-muted/20 flex-1 overflow-y-auto py-6 px-2 md:px-4 lg:px-6 space-y-8 pb-16">
       <div className="flex flex-col space-y-1 fade-in-up">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Admin Overview</h1>
         <p className="text-muted-foreground">Monitor and manage your organization's workflow ecosystem.</p>

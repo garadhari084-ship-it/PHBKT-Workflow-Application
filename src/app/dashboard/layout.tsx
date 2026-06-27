@@ -19,19 +19,19 @@ export default function DashboardLayout() {
 
   if (isUserLoading || !user) {
     return (
-        <div className="flex flex-col h-screen">
-            <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="flex h-20 items-center justify-between px-4">
-                    <div className="flex items-center gap-4">
-                        <Skeleton className="h-12 w-48" />
+        <div className="flex flex-col h-screen overflow-hidden w-full">
+            <header className="flex-shrink-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                <div className="flex h-16 md:h-20 items-center justify-between pl-0 pr-2 md:pr-4">
+                    <div className="flex items-center gap-2 md:gap-4">
+                        <Skeleton className="h-10 md:h-12 w-32 md:w-48" />
                     </div>
-                    <div className="flex items-center gap-2">
-                        <Skeleton className="h-8 w-24" />
-                        <Skeleton className="h-8 w-32" />
+                    <div className="flex items-center gap-1 md:gap-2">
+                        <Skeleton className="h-8 w-20 md:w-24" />
+                        <Skeleton className="h-8 w-8 md:w-32" />
                     </div>
                 </div>
             </header>
-            <div className="border-b-[1px] border-primary sticky top-20 z-40 bg-background">
+            <div className="flex-shrink-0 border-b-[1px] border-primary z-40 bg-background">
                 <div className="flex items-end h-9">
                     <Skeleton className="h-full w-20" />
                     <Skeleton className="h-full w-20" />

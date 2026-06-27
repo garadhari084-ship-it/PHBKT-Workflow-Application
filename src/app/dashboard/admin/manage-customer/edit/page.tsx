@@ -25,7 +25,7 @@ function EditCustomerContent() {
 
   if (error) {
     return (
-      <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+      <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto px-2 md:px-4 lg:px-6 py-4 md:py-6">
         <div className="max-w-5xl mx-auto">
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
@@ -41,7 +41,7 @@ function EditCustomerContent() {
 
   if (isLoadingCustomer) {
     return (
-      <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+      <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto px-2 md:px-4 lg:px-6 py-4 md:py-6">
         <div className="max-w-5xl mx-auto">
           <Skeleton className="h-10 w-48 mb-6" />
           <Card>
@@ -76,7 +76,7 @@ function EditCustomerContent() {
   }
 
   return (
-    <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+    <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto px-2 md:px-4 lg:px-6 py-4 md:py-6">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-2xl font-bold mb-6">Edit Customer: {customer.name}</h1>
         <EditCustomerForm customer={customer} />

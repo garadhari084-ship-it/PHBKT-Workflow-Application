@@ -91,7 +91,7 @@ export default function AdminWorkItemsPage() {
   };
 
   return (
-    <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 space-y-6">
+    <div className="w-full px-2 py-4 space-y-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="h-8 w-8">

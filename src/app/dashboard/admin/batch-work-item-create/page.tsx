@@ -338,7 +338,7 @@ export default function BatchWorkItemCreatePage() {
   };
 
   return (
-    <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+    <div className="w-full border-b border-primary bg-background flex-1 overflow-y-auto px-2 md:px-4 lg:px-6 py-4 md:py-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-4">

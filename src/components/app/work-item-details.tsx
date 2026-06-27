@@ -300,7 +300,7 @@ export default function WorkItemDetails({ workItem, notes, documents, users, tas
         }
     };
 
-    const tabTriggerClassName = "py-1 px-3 h-auto rounded-none border-r border-white/20 text-primary-foreground focus-visible:ring-0 focus-visible:ring-offset-0 data-[state=inactive]:bg-primary data-[state=inactive]:hover:bg-primary/90 data-[state=active]:bg-black data-[state=active]:hover:bg-black/90 shrink-0";
+    const tabTriggerClassName = "py-1 px-3 h-auto rounded-none border-r border-b border-white/20 text-primary-foreground focus-visible:ring-0 focus-visible:ring-offset-0 data-[state=inactive]:bg-primary data-[state=inactive]:hover:bg-primary/90 data-[state=active]:bg-black data-[state=active]:text-white data-[state=active]:hover:bg-black/90 shrink-0";
     
     const handleVerifyClick = () => {
         if (!user) return;
@@ -809,7 +809,7 @@ export default function WorkItemDetails({ workItem, notes, documents, users, tas
 
                 {/* Tabs Section */}
                 <Tabs defaultValue="overview" className="w-full">
-                    <TabsList className="flex flex-wrap justify-start w-full h-auto bg-primary p-0 rounded-none border-y border-primary">
+                    <TabsList className="flex overflow-x-auto no-scrollbar justify-start w-full h-auto bg-primary p-0 rounded-none border-y border-primary">
                         <TabsTrigger value="overview" className={tabTriggerClassName}>Work Overview</TabsTrigger>
                         <TabsTrigger value="notes" className={tabTriggerClassName}>Notes</TabsTrigger>
                         <TabsTrigger value="contact" className={tabTriggerClassName}>Contact info</TabsTrigger>

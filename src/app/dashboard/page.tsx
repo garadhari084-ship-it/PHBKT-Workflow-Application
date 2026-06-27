@@ -84,7 +84,7 @@ export default function DashboardPage() {
 
   if (error) {
     return (
-      <div className="w-full bg-background flex-1 overflow-y-auto p-4 space-y-4 font-calibri-light">
+      <div className="w-full bg-background flex-1 overflow-y-auto px-2 py-4 space-y-4 font-calibri-light">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
@@ -97,7 +97,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="w-full bg-background flex-1 overflow-y-auto p-4 space-y-4 font-calibri-light">
+    <div className="w-full bg-background flex-1 overflow-y-auto px-2 py-4 space-y-4 font-calibri-light">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-xl font-bold">My Work</h1>
