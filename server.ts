@@ -2,6 +2,8 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { firestore } from "./backend/firebase-server";
+import { createWorkItemFromApi } from "./backend/ai/flows/create-work-item-flow";
+import { generateEmail } from "./backend/ai/flows/generate-email-flow";
 
 async function startServer() {
   const app = express();
@@ -37,8 +39,6 @@ async function startServer() {
       if (configData?.geminiApiKey) {
         process.env.GEMINI_API_KEY = configData.geminiApiKey;
       }
-
-      const { createWorkItemFromApi } = await import("./backend/ai/flows/create-work-item-flow");
 
       const input = {
         product: body.product || body.details,
@@ -86,8 +86,6 @@ async function startServer() {
         res.status(500).json({ error: "Gemini API Key is not configured. Please add it in the Admin Panel under API Integration or in your environment variables." });
         return;
       }
-
-      const { generateEmail } = await import("./backend/ai/flows/generate-email-flow");
 
       const result = await generateEmail(restBody);
       res.status(200).json(result);
